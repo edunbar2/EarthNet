@@ -34,13 +34,12 @@ margin-left: 30%;
 
 .head{
     background-color: #7c8b69;
-    height:10%;
+    height:200px;
     width: 100%;
     margin: 0;
     padding: 0;
     border: 0;
     top: 0;
-    position: fixed;
     border: solid 1px black;
     display: flex;
 }

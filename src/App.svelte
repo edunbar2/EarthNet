@@ -1,16 +1,34 @@
 <script>
  import Navbar from "./Components/Navbar.svelte";
  import Header from "./Components/Header.svelte";
- let tabs = ["Dashboard", "Configure"];
+ import Dashboard from "./Components/Dashboard.svelte";
+ import Configuration from "./Components/Configuration.svelte";
+ import Admin from "./Components/Admin.svelte";
+ 
+ let tabs = ["Dashboard", "Configure", "Admin"];
+ let current_tab = "Dashboard";
+
+
+ const changeTab = (event) => {
+    current_tab = event.detail;
+  }
+
+
 </script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <main>
   <Header />
-  <Navbar {tabs}/>
-  <div class=body>
-    <p>This is a temporary tag for effect</p>
-  </div>
+  <Navbar {tabs} {current_tab} on:tabClicked={changeTab}/>
+
+  {#if current_tab === "Dashboard"}
+    <Dashboard />
+  {:else if current_tab === "Configure"}
+  <Configuration />
+  {:else if current_tab === "Admin"}
+  <Admin />
+  {/if}
+  
 </main>
 
 <style>
@@ -24,10 +42,7 @@
   }
 .body{
   background-color: #6B7361;
-  height: 95%;
-  width: 90%;
-  margin-left:10%;
-  margin-top: 5%;
+  width: 100%;
   border: solid 1px black;
 }
 </style>
