@@ -4,7 +4,7 @@ import {createEventDispatcher } from 'svelte';
 let dispatch = createEventDispatcher();
 
 export let tabs = [];
-export let current_tab;
+export let current_tab = "";
 
 const  handleTabClick = (tab) => {
     dispatch('tabClicked', tab)
