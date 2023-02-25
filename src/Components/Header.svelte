@@ -2,7 +2,7 @@
 <main>
     <div class=head>
         <div class=logo>
-            <img src="../assets/logo.png" alt="Logo">
+            <img src="/src/assets/logo.jpg" alt="Logo">
         </div>
         <div class=title>
             <h1>Green Earth</h1>
@@ -16,13 +16,12 @@
 <style>
 
 .logo{
-width: 10%;
-height: 100%;
+
 /* border: solid 1px black; */
 }
 
 .logo img{
-    width: 25px;
+    width: 225px;
     aspect-ratio: 1;
 }
 
@@ -30,6 +29,11 @@ height: 100%;
 justify-content: center;
 text-align: center;
 margin-left: 30%;
+}
+
+.title h1 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 48px;
 }
 
 .head{
