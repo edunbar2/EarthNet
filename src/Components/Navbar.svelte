@@ -36,7 +36,7 @@ const  handleTabClick = (tab) => {
     justify-content: flex-end;
     border-top: solid 0.5px black;
     
-
+}
 .tabs{
     width: 800px;
     display: grid;
