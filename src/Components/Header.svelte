@@ -1,15 +1,15 @@
 
-<main>
+<header>
     <div class=head>
         <div class=logo>
-            <img src="/src/assets/logo.jpg" alt="Logo">
+            <img src="/src/assets/logo.PNG" alt="Logo">
         </div>
         <div class=title>
             <h1>Green Earth</h1>
             
         </div>
     </div>
-</main>
+</header>
 
 
 
@@ -28,13 +28,10 @@
 .title{
 justify-content: center;
 text-align: center;
-margin-left: 30%;
+margin: auto;
 }
 
-.title h1 {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 48px;
-}
+
 
 .head{
     background-color: #7c8b69;
@@ -44,7 +41,6 @@ margin-left: 30%;
     padding: 0;
     border: 0;
     top: 0;
-    border: solid 1px black;
     display: flex;
 }
 </style>

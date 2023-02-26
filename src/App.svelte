@@ -1,6 +1,7 @@
 <script>
  import Navbar from "./Components/Navbar.svelte";
  import Header from "./Components/Header.svelte";
+ import Footer from "./Components/Footer.svelte";
  import Dashboard from "./Components/Dashboard.svelte";
  import Configuration from "./Components/Configuration.svelte";
  import Admin from "./Components/Admin.svelte";
@@ -15,8 +16,8 @@
 
 
 </script>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <main>
   <Header />
   <Navbar {tabs} {current_tab} on:tabClicked={changeTab}/>
@@ -28,8 +29,10 @@
   {:else if current_tab === "Admin"}
   <Admin />
   {/if}
-  
+  <Footer />
 </main>
+
+
 
 <style>
   main{

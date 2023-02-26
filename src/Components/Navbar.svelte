@@ -13,7 +13,7 @@ const  handleTabClick = (tab) => {
 </script>
 
 
-<main>
+
 <div class=bar>
     <div class=tabs>
         {#each tabs as tab}
@@ -23,7 +23,7 @@ const  handleTabClick = (tab) => {
         {/each}
     </div>
 </div>
-</main>
+
 
 <style>
 .bar{
@@ -34,8 +34,8 @@ const  handleTabClick = (tab) => {
     width: 100%;
     display: flex;
     justify-content: flex-end;
+    border-top: solid 0.5px black;
     
-}
 
 .tabs{
     width: 800px;
@@ -48,13 +48,15 @@ const  handleTabClick = (tab) => {
     text-align: center;
     width: 150px;
     height: 50px;
-    border: solid 2px black;
     pointer-events: auto;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 18;
 }
 
 .highlighted{
     background-color: #D7F9AB;
     border: none;
+    transition: all 0.5s ease-out;
 }
 
 

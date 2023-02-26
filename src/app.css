@@ -22,3 +22,41 @@ img { border: 0; }
 body{
     background-color: #6B7361;
 }
+
+
+h1{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 48;
+    font-weight: bold;
+}
+
+
+h2{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 36;
+    font-weight: bold;
+}
+
+h3{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 24;
+    font-weight: bold;
+
+}
+
+h4{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 18;
+    font-weight: bold;
+
+}
+
+.large-text{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 18;
+}
+
+.medium-text{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14;
+}
