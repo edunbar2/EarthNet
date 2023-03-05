@@ -38,7 +38,7 @@ const  handleTabClick = (tab) => {
     
 }
 .tabs{
-    width: 800px;
+    width: 600px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 }

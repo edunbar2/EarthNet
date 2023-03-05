@@ -16,9 +16,10 @@
 
 
 </script>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 
 <main>
+  
   <Header />
   <Navbar {tabs} {current_tab} on:tabClicked={changeTab}/>
 
@@ -36,16 +37,16 @@
 
 <style>
   main{
-
+    display: flex;
+    flex-direction: column;
     background-color: #6B7361;
     height: 100%;
     width:100%;
-    position: absolute;
+    border: solid 1px black;
 
   }
 .body{
   background-color: #6B7361;
   width: 100%;
-  border: solid 1px black;
 }
 </style>
