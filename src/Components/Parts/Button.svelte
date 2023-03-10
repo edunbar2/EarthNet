@@ -2,9 +2,11 @@
     export let type = 'primary';
     export let flat = false;
     export let inverse = false;
+    export let small = false;
+    export let end = false;
   </script>
   
-  <button class:flat={flat} class:inverse={inverse} class={type} on:click>
+  <button class:flat={flat} class:inverse={inverse} class={type} class:end={end} class:small={small} on:click>
     <slot></slot>
   </button>
   
@@ -39,5 +41,14 @@
       color: #45c496;
       background: white;
       border: 2px solid #45c496;
+    }
+
+    .end{
+      align-self: end;
+    }
+
+    .small{
+      width: 130px;
+      height: 30px;
     }
   </style>

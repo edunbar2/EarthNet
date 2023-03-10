@@ -16,8 +16,7 @@
 <style>
 
 .logo{
-
-/* border: solid 1px black; */
+    border: solid 1px black;
 }
 
 .logo img{
@@ -26,9 +25,17 @@
 }
 
 .title{
+width: 100%;
 justify-content: center;
+align-items: center;
 text-align: center;
-margin: auto;
+align-self: center;
+margin: 0;
+display: flex;
+}
+
+.title h1{
+    width: 300px;
 }
 
 
