@@ -14,7 +14,8 @@
     let supported_vendors = [{name:"Cisco", operatingSystems:["IOS", "NX-OS", "IOS-XR"]}, {name:"Juniper", operatingSystems:["1", "2", "3"]}];
     let toggleManual = true;
     let manual_script = "";
-    let tool_config = []; // stores data from the configuration tool to be handled by the python script
+    let tool_config_info = {type: '', config_type: ''};
+    let tool_config_script = []; // stores data from the configuration tool to be handled by the python script
     
 
     $: scrollable = devices.length > maxInputs;
@@ -102,7 +103,7 @@ let selectedVendor = supported_vendors[0];
                         </select>
                         
                     </label>
-                    <Button type="button" on:click={() => removeDevice(i)} small={true}>Remove Device</Button>
+                    <Button on:click={() => removeDevice(i)} small={true} >Remove Device</Button>
                     
                 </div>
                 {/each}
@@ -120,12 +121,58 @@ let selectedVendor = supported_vendors[0];
                     <h2>Configuration Tool</h2>
                     <label for="type">
                         Device Type:<br>
-                        <select name="type" id="type" bind:value={}}>
+                        <select name="type" id="type" bind:value={tool_config_info.type}>
                             {#each supported_device_types as device}
                             <option value="{device}">{device}</option>
                             {/each}
                         </select>
                     </label>
+                    <!-- Prompt router configuration options -->
+                    {#if tool_config_info.type === 'Router'} 
+                    <p>routing</p>
+                    <!-- Interface configuration -->
+
+                        <!-- Routing -->
+
+                        <!-- static routing -->
+
+                        <!-- dynamic routing -->
+
+                        <!-- protocol -->
+
+                        <!-- interface -->
+
+                        <!-- network -->
+
+                        <!-- subnet mask or wildcard mask -->
+
+
+                    <!-- Promp switch configuration options -->
+                    {:else}
+                    <p>switching</p>
+                    <label for="config-type">
+                        Conifiguration type:
+                        <select name="config-type" id="switch-config-type" bind:value={tool_config_info.config_type}>
+                            <option  value="Interface">Interface Configuration</option>
+                            <option value="VLAN">VLAN Configuration</option>
+                            <option value="VTP">VTP Configuration</option>
+                        </select>
+                    </label>
+                    <!-- Interface configuration -->
+                    {#if tool_config_info.config_type === "Interface"}
+                        <p>Interface</p>
+                    {:else if tool_config_info.config_type === "VLAN"}
+                    <p>VLAN</p>
+                    {:else if tool_config_info.config_type === "VTP"}
+                    <p>VTP</p>
+                        
+                    {/if}
+
+                    <!-- VLAN configuration -->
+
+                    <!-- VTP configuration -->
+
+                    {/if}
                 </div>   
             
             {/if}

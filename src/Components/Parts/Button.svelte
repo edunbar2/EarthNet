@@ -6,7 +6,7 @@
     export let end = false;
   </script>
   
-  <button class:flat={flat} class:inverse={inverse} class={type} class:end={end} class:small={small} on:click>
+  <button class:flat={flat} class:inverse={inverse} class={type} class:end={end} class:small={small} on:click type='button'>
     <slot></slot>
   </button>
   
