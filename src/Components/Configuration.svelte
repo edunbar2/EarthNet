@@ -8,25 +8,27 @@
 
     // variables
     let window = 0; // determine which window to display to the user
-    let devices = [{ip: "", type: "", vendor: "", os: "", }]; // Stores objects contianing the device information
+    let devices = [{ip: "", type: "", vendor: "", os: ""}]; // Stores objects contianing the device information
     let supported_device_types = ["Switch", "Router"];
     let number_of_devices = 3;
     let supported_vendors = [{name:"Cisco", operatingSystems:["IOS", "NX-OS", "IOS-XR"]}, {name:"Juniper", operatingSystems:["1", "2", "3"]}];
     let toggleManual = true;
     let manual_script = "";
-    let tool_config_info = {type: '', config_type: ''};
-    let tool_config_script = []; // stores data from the configuration tool to be handled by the python script
+
+    // stores data from the configuration tool to be handled by the python script
+    //
+    let tool_config_script = {device_type: '', config_type: '', main_action: '', sub_action: '', specific_sub_actions: '', interface: '', id: ''}; 
     
 
     $: scrollable = devices.length > maxInputs;
 
-    // functions
+    // functions for form
     const addDevice = () => {
     devices = [...devices, {ip: "", type: "", vendor: "", os: ""}];
 }
 
 const removeDevice = (index) => {
-    console.log(`Device removed: ${devices[index]}`);
+    console.log(`Device removed: Device IP: ${devices[index].ip} Type: ${devices[index].type} Vendor: ${devices[index].vendor} OS: ${devices[index].os}`);
     // if(devices.length > 1)
      devices = devices.filter((_, i) => i !== index);
 }
@@ -44,7 +46,7 @@ const validateIP = (ip) => {
 
     //validate fields are correct and send to python script for implementation
 const submitHandler = () => {
-    console.log("Submitted");
+    console.log(`Submitted; ${devices} will be configured with: ${toggleManual ? manual_script : tool_config_script}`);
 }
 
 const logClick = () => {
@@ -55,6 +57,8 @@ const logClick = () => {
 const logInput = () => {
     console.log(manual_script);
 }
+
+// functions for handling configuration tool
 
 let selectedVendor = supported_vendors[0];
 </script>
@@ -69,7 +73,7 @@ let selectedVendor = supported_vendors[0];
                 {#each devices as device, i}
                 <div class="input">
                     <label for="address">
-                        Device Name:
+                        Device IP:
                         <input type="text" bind:value={device.ip} placeholder="IP Address">
                         {#if validateIP(device.ip)}
                         <p style="color: green;" class="ip-valid">Valid IP</p>
@@ -121,15 +125,15 @@ let selectedVendor = supported_vendors[0];
                     <h2>Configuration Tool</h2>
                     <label for="type">
                         Device Type:<br>
-                        <select name="type" id="type" bind:value={tool_config_info.type}>
+                        <select name="type" id="type" bind:value={tool_config_script.device_type}>
                             {#each supported_device_types as device}
                             <option value="{device}">{device}</option>
                             {/each}
                         </select>
                     </label>
                     <!-- Prompt router configuration options -->
-                    {#if tool_config_info.type === 'Router'} 
-                    <p>routing</p>
+                    {#if tool_config_script.device_type === 'Router'} 
+                    <p>Routing</p>
                     <!-- Interface configuration -->
 
                         <!-- Routing -->
@@ -149,28 +153,53 @@ let selectedVendor = supported_vendors[0];
 
                     <!-- Promp switch configuration options -->
                     {:else}
-                    <p>switching</p>
+                    <p>Switching</p>
                     <label for="config-type">
                         Conifiguration type:
-                        <select name="config-type" id="switch-config-type" bind:value={tool_config_info.config_type}>
+                        <select name="config-type" id="switch-config-type" bind:value={tool_config_script.config_type}>
                             <option  value="Interface">Interface Configuration</option>
                             <option value="VLAN">VLAN Configuration</option>
                             <option value="VTP">VTP Configuration</option>
                         </select>
                     </label>
                     <!-- Interface configuration -->
-                    {#if tool_config_info.config_type === "Interface"}
+                    {#if tool_config_script.config_type === "Interface"}
                         <p>Interface</p>
-                    {:else if tool_config_info.config_type === "VLAN"}
+                        <!-- VLAN configuration -->
+                    {:else if tool_config_script.config_type === "VLAN"}
                     <p>VLAN</p>
-                    {:else if tool_config_info.config_type === "VTP"}
+                    <!-- Deleting, Adding, or Modifying -->
+                    <label for="VLAN-Action">
+                        VLAN Action:
+                        <select name="action" id="VLAN-Action" bind:value={tool_config_script.main_action}>
+                            <option value="Add">Add</option>
+                            <option value="Modify">Modify</option>
+                            <option value="Delete">Delete</option>
+                        </select>
+                    </label>
+                    <!-- VLAN ID -->
+                    <label for="VLAN-ID">VLAN ID
+                        VLAN ID:
+                        <input type="number" bind:value={tool_config_script.id}>
+                    </label>
+
+                    <!-- add VLAN, config is done -->
+                    {#if tool_config_script.main_action === "Add"}
+                    Configuration is Ready!
+                    <!-- Modify existing VLAN -->
+                    {:else if tool_config_script.main_action === "Modify"}
+                    
+                    <!-- implied delete VLAN, config is done -->
+                    {:else}
+                        <p>Configuration is ready!</p>
+                    {/if}
+                    <!-- VTP configuration -->
+                    {:else if tool_config_script.config_type === "VTP"}
                     <p>VTP</p>
                         
                     {/if}
 
-                    <!-- VLAN configuration -->
 
-                    <!-- VTP configuration -->
 
                     {/if}
                 </div>   
