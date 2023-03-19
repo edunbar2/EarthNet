@@ -184,7 +184,7 @@ let selectedVendor = supported_vendors[0];
                     </label>
 
                     <!-- add VLAN, config is done -->
-                    {#if tool_config_script.main_action === "Add"}
+                    {#if tool_config_script.main_action === "Add" && tool_config_script.id != ''}
                     Configuration is Ready!
                     <!-- Modify existing VLAN -->
                     {:else if tool_config_script.main_action === "Modify"}
