@@ -238,21 +238,20 @@ let selectedVendor = supported_vendors[0];
                     <p>Tagged Interfaces:</p>
                     <ul>
                         {#each tool_config_script.vlan_tagged_interfaces as face}
-                            <li>face</li>
+                            <li>{face}</li>
                         {/each}
 
                     </ul>
                     <label for="VLAN-Tagged-Interfaces">VLAN Tagged Interfaces
                         Add Tagged Interface:
                         <input type="text" bind:value={interface_to_add}>
-                        <p>{interface_to_add}</p>
                         <button type="button" on:click={add_tagged_interface}>Add Interface</button>
                     </label>
                     <br><br>
                     <p>Untagged Interfaces:</p>
                     <ul>
                         {#each tool_config_script.vlan_untagged_interfaces as face}
-                            <li>face</li>
+                            <li>{face}</li>
                         {/each}
 
                     </ul>
