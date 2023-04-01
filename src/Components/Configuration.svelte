@@ -38,7 +38,8 @@
         config_type = event.target.value;
     }
 
-    const add_interface = () => {
+    const add_tagged_interface = () => {
+        console.log("Adding interface" + interface_to_add);
         if(interface_to_add !== "") tool_config_script.vlan_tagged_interfaces = [...tool_config_script.vlan_tagged_interfaces,interface_to_add];
     }
 
@@ -244,7 +245,8 @@ let selectedVendor = supported_vendors[0];
                     <label for="VLAN-Tagged-Interfaces">VLAN Tagged Interfaces
                         Add Tagged Interface:
                         <input type="text" bind:value={interface_to_add}>
-                        <button type="button" on:click={() => add_interface}>Add Interface</button>
+                        <p>{interface_to_add}</p>
+                        <button type="button" on:click={add_tagged_interface}>Add Interface</button>
                     </label>
                     <br><br>
                     <p>Untagged Interfaces:</p>
@@ -257,7 +259,7 @@ let selectedVendor = supported_vendors[0];
                     <label for="VLAN-Untagged-Interfaces">VLAN Untagged Interfaces
                         Add Untagged Interface:
                         <input type="text" bind:value={untagged_interface_to_add}>
-                        <button type="button" on:click={() => add_untagged_interface}>Add Interface</button>
+                        <button type="button" on:click={add_untagged_interface}>Add Interface</button>
                     </label>
         
                     <!-- VTP configuration -->
