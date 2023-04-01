@@ -24,7 +24,7 @@
 
     let config_map = 
     {
-        'interface config': {interface_name: '', ip_address: '', subnet_mask: '', description: ''},
+        'interface config': {interface_name: '', ip_address: 'Switch', subnet_mask: '', description: ''},
        'static routing': {destination_network: '', next_hop: '', subnet_mask: ''},
        'dynamic routing': {routing_protocol: '', network: '', subnet_mask: '', interface: '', areas: '', ospf_leader: false},
        'vlan config': {vlan_id: '', vlan_name: '', vlan_description: '', delete: false, vlan_state: true, vlan_mtu: '', vlan_ip_address: '', vlan_ip_mask: '', vlan_tagged_interfaces: [], vlan_untagged_interfaces: []},
