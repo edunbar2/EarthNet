@@ -1,5 +1,6 @@
 <script>
     import { each } from "svelte/internal";
+    import Admin from "./Admin.svelte";
     import Button from "./Parts/Button.svelte";
 
     // constants
@@ -38,11 +39,11 @@
     }
 
     const add_interface = () => {
-        if(interface_to_add !== "") tool_config_script.vlan_tagged_interfaces.append(interface_to_add);
+        if(interface_to_add !== "") tool_config_script.vlan_tagged_interfaces = [...tool_config_script.vlan_tagged_interfaces,interface_to_add];
     }
 
     const add_untagged_interface = () => {
-        if(untagged_interface_to_add !== "") tool_config_script.vlan_untagged_interfaces.append(untagged_interface_to_add);
+        if(untagged_interface_to_add !== "") tool_config_script.vlan_untagged_interfaces = [...tool_config_script.vlan_untagged_interfaces, untagged_interface_to_add];
     }
 
     $: scrollable = devices.length > maxInputs;
