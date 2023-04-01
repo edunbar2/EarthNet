@@ -150,7 +150,7 @@ let selectedVendor = supported_vendors[0];
                     <h2>Configuration Tool</h2>
                     <label for="type">
                         Device Type:<br>
-                        <select name="type" id="type" bind:value={tool_config_script.device_type}>
+                        <select name="type" id="type" bind:value={devices[0].type}>
                             {#each supported_device_types as device}
                             <option value="{device}">{device}</option>
                             {/each}
