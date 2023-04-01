@@ -16,26 +16,40 @@
     let manual_script = "";
 
     // stores data from the configuration tool to be handled by the python script
-    //
-    let tool_config_script = {device_type: '', config_type: '', main_action: '', sub_action: '', specific_sub_actions: '', interface: '', id: ''}; 
+
+    let tool_config_script; 
+    let config_type = "";
+    let interface_to_add = "";
+    let untagged_interface_to_add
 
     let config_map = 
     {
         'interface config': {interface_name: '', ip_address: '', subnet_mask: '', description: ''},
        'static routing': {destination_network: '', next_hop: '', subnet_mask: ''},
        'dynamic routing': {routing_protocol: '', network: '', subnet_mask: '', interface: '', areas: '', ospf_leader: false},
-       'vlan config': {vlan_id: '', vlan_name: '', vlan_description: '', delete: false, vlan_state: '', vlan_mtu: '', vlan_ip_address: '', vlan_ip_mask: '', vlan_tagged_interfaces: [], vlan_untagged_interfaces: []},
+       'vlan config': {vlan_id: '', vlan_name: '', vlan_description: '', delete: false, vlan_state: true, vlan_mtu: '', vlan_ip_address: '', vlan_ip_mask: '', vlan_tagged_interfaces: [], vlan_untagged_interfaces: []},
        'vtp config': {vtp_domain: '', vtp_password: ''},
 
     }
 
-    
+    const handle_config_type = (event) => {
+        tool_config_script = config_map.get(event.target.value);
+        config_type = event.target.value;
+    }
+
+    const add_interface = () => {
+        if(interface_to_add !== "") tool_config_script.vlan_tagged_interfaces.append(interface_to_add);
+    }
+
+    const add_untagged_interface = () => {
+        if(untagged_interface_to_add !== "") tool_config_script.vlan_untagged_interfaces.append(untagged_interface_to_add);
+    }
 
     $: scrollable = devices.length > maxInputs;
 
     // functions for form
     const addDevice = () => {
-    devices = [...devices, {ip: "", type: "", vendor: "", os: ""}];
+    devices = [...devices, {ip: "", type: devices[0].type, vendor: "", os: ""}];
 }
 
 const removeDevice = (index) => {
@@ -143,7 +157,7 @@ let selectedVendor = supported_vendors[0];
                         </select>
                     </label>
                     <!-- Prompt router configuration options -->
-                    {#if tool_config_script.device_type === 'Router'} 
+                    {#if devices[0].type === 'Router'} 
                     <p>Routing</p>
                     <!-- Interface configuration -->
 
@@ -164,48 +178,89 @@ let selectedVendor = supported_vendors[0];
 
                     <!-- Promp switch configuration options -->
                     {:else}
+
                     <p>Switching</p>
                     <label for="config-type">
                         Conifiguration type:
-                        <select name="config-type" id="switch-config-type" bind:value={tool_config_script.config_type}>
-                            <option  value="Interface">Interface Configuration</option>
-                            <option value="VLAN">VLAN Configuration</option>
-                            <option value="VTP">VTP Configuration</option>
+                        <select name="config-type" id="switch-config-type" on:change={handle_config_type}>
+                            <option  value="interface config">Interface Configuration</option>
+                            <option value="vlan config">VLAN Configuration</option>
+                            <option value="vtp config">VTP Configuration</option>
                         </select>
                     </label>
                     <!-- Interface configuration -->
-                    {#if tool_config_script.config_type === "Interface"}
+                    {#if config_type === "interface config"}
                         <p>Interface</p>
                         <!-- VLAN configuration -->
-                    {:else if tool_config_script.config_type === "VLAN"}
+                    {:else if config_type === "vlan config"}
                     <p>VLAN</p>
-                    <!-- Deleting, Adding, or Modifying -->
-                    <label for="VLAN-Action">
-                        VLAN Action:
-                        <select name="action" id="VLAN-Action" bind:value={tool_config_script.main_action}>
-                            <option value="Add">Add</option>
-                            <option value="Modify">Modify</option>
-                            <option value="Delete">Delete</option>
-                        </select>
-                    </label>
+                    <!-- Deleting? -->
+                    <p>Delete VLAN?</p> <input type="checkbox" bind:checked={tool_config_script.delete}>
+
+                        <!-- vlan_id: '', vlan_name: '', vlan_description: '', delete: false, vlan_state: true, vlan_mtu: '', vlan_ip_address: '', vlan_ip_mask: '', vlan_tagged_interfaces: [], vlan_untagged_interfaces: [] -->
+
                     <!-- VLAN ID -->
                     <label for="VLAN-ID">VLAN ID
                         VLAN ID:
-                        <input type="number" bind:value={tool_config_script.id}>
+                        <input type="number" bind:value={tool_config_script.vlan_id}>
                     </label>
+                    <label for="VLAN-Name">VLAN Name
+                        VLAN Name:
+                        <input type="text" bind:value={tool_config_script.vlan_name}>
+                    </label>
+                    <label for="VLAN-Description">VLAN Description
+                        VLAN Description:
+                        <input type="number" bind:value={tool_config_script.vlan_description}>
+                    </label>
+                    <label for="VLAN-State">VLAN State
+                        Active or Suspended state?:
+                        <input type="checkbox" bind:value={tool_config_script.vlan_state}>
+                    </label>
+                    <label for="VLAN-MTU">VLAN MTU
+                        VLAN MTU:
+                        <input type="number" bind:value={tool_config_script.vlan_mtu} placeholder="-1">
+                    </label>
+                    <label for="VLAN-IP">VLAN IP
+                        VLAN IP:
+                        <input type="number" bind:value={tool_config_script.vlan_ip_address}>
+                    </label>
+                    <label for="VLAN-Mask">VLAN Mask
+                        VLAN Mask:
+                        <input type="number" bind:value={tool_config_script.vlan_ip_mask}>
+                    </label>
+                    <label for="VLAN-ID">VLAN ID
+                        VLAN ID:
+                        <input type="number" bind:value={tool_config_script.vlan_id}>
+                    </label>
+                    <br><br>
+                    <p>Tagged Interfaces:</p>
+                    <ul>
+                        {#each tool_config_script.vlan_tagged_interfaces as face}
+                            <li>face</li>
+                        {/each}
 
-                    <!-- add VLAN, config is done -->
-                    {#if tool_config_script.main_action === "Add" && tool_config_script.id != ''}
-                    Configuration is Ready!
-                    <!-- Modify existing VLAN -->
-                    {:else if tool_config_script.main_action === "Modify"}
-                    
-                    <!-- implied delete VLAN, config is done -->
-                    {:else}
-                        <p>Configuration is ready!</p>
-                    {/if}
+                    </ul>
+                    <label for="VLAN-Tagged-Interfaces">VLAN Tagged Interfaces
+                        Add Tagged Interface:
+                        <input type="text" bind:value={interface_to_add}>
+                        <button on:click={() => add_interface}>Add Interface</button>
+                    </label>
+                    <br><br>
+                    <p>Untagged Interfaces:</p>
+                    <ul>
+                        {#each tool_config_script.vlan_untagged_interfaces as face}
+                            <li>face</li>
+                        {/each}
+
+                    </ul>
+                    <label for="VLAN-Untagged-Interfaces">VLAN Untagged Interfaces
+                        Add Untagged Interface:
+                        <input type="text" bind:value={untagged_interface_to_add}>
+                        <button on:click={() => add_untagged_interface}>Add Interface</button>
+                    </label>
+        
                     <!-- VTP configuration -->
-                    {:else if tool_config_script.config_type === "VTP"}
+                    {:else if config_type === "vtp config"}
                     <p>VTP</p>
                         
                     {/if}
