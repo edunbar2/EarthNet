@@ -33,7 +33,7 @@
     }
 
     const handle_config_type = (event) => {
-        tool_config_script = config_map.get(event.target.value);
+        tool_config_script = config_map[event.target.value];
         config_type = event.target.value;
     }
 
