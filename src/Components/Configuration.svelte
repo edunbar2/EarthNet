@@ -243,7 +243,7 @@ let selectedVendor = supported_vendors[0];
                     <label for="VLAN-Tagged-Interfaces">VLAN Tagged Interfaces
                         Add Tagged Interface:
                         <input type="text" bind:value={interface_to_add}>
-                        <button on:click={() => add_interface}>Add Interface</button>
+                        <button type="button" on:click={() => add_interface}>Add Interface</button>
                     </label>
                     <br><br>
                     <p>Untagged Interfaces:</p>
@@ -256,7 +256,7 @@ let selectedVendor = supported_vendors[0];
                     <label for="VLAN-Untagged-Interfaces">VLAN Untagged Interfaces
                         Add Untagged Interface:
                         <input type="text" bind:value={untagged_interface_to_add}>
-                        <button on:click={() => add_untagged_interface}>Add Interface</button>
+                        <button type="button" on:click={() => add_untagged_interface}>Add Interface</button>
                     </label>
         
                     <!-- VTP configuration -->
