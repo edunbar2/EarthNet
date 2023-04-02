@@ -223,7 +223,7 @@ let selectedVendor = supported_vendors[0];
                     <label for="VLAN-Mask">VLAN Mask
                         VLAN Mask:
                         <input type="number" bind:value={tool_config_script.vlan_ip_mask}>
-                    </label>
+                    </label> <br>
                     <label for="VLAN-ID">VLAN ID
                         VLAN ID:
                         <input type="number" bind:value={tool_config_script.vlan_id}>
@@ -280,6 +280,9 @@ let selectedVendor = supported_vendors[0];
 <style>
 *{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+label{
+    text-align: end;
 }
 
 h1 h2 h3 h4{
