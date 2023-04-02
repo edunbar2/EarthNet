@@ -150,14 +150,6 @@ let selectedVendor = supported_vendors[0];
             {:else}
                 <div class=tool-div>
                     <h2>Configuration Tool</h2>
-                    <label for="type">
-                        Device Type:<br>
-                        <select name="type" id="type" bind:value={devices[0].type}>
-                            {#each supported_device_types as device}
-                            <option value="{device}">{device}</option>
-                            {/each}
-                        </select>
-                    </label>
                     <!-- Prompt router configuration options -->
                     {#if devices[0].type === 'Router'} 
                     <p>Routing</p>
@@ -200,12 +192,12 @@ let selectedVendor = supported_vendors[0];
                     <p>Delete VLAN?</p> <input type="checkbox" bind:checked={tool_config_script.delete}>
 
                         <!-- vlan_id: '', vlan_name: '', vlan_description: '', delete: false, vlan_state: true, vlan_mtu: '', vlan_ip_address: '', vlan_ip_mask: '', vlan_tagged_interfaces: [], vlan_untagged_interfaces: [] -->
-
+                    {#if !tool_config_script.delete}
                     <!-- VLAN ID -->
                     <label for="VLAN-ID">VLAN ID
                         VLAN ID:
                         <input type="number" bind:value={tool_config_script.vlan_id}>
-                    </label>
+                    </label><br>
                     <label for="VLAN-Name">VLAN Name
                         VLAN Name:
                         <input type="text" bind:value={tool_config_script.vlan_name}>
@@ -213,19 +205,19 @@ let selectedVendor = supported_vendors[0];
                     <label for="VLAN-Description">VLAN Description
                         VLAN Description:
                         <input type="number" bind:value={tool_config_script.vlan_description}>
-                    </label>
+                    </label><br>
                     <label for="VLAN-State">VLAN State
                         Active or Suspended state?:
                         <input type="checkbox" bind:value={tool_config_script.vlan_state}>
-                    </label>
+                    </label><br>
                     <label for="VLAN-MTU">VLAN MTU
                         VLAN MTU:
                         <input type="number" bind:value={tool_config_script.vlan_mtu} placeholder="-1">
-                    </label>
+                    </label><br>
                     <label for="VLAN-IP">VLAN IP
                         VLAN IP:
                         <input type="number" bind:value={tool_config_script.vlan_ip_address}>
-                    </label>
+                    </label> <br>
                     <label for="VLAN-Mask">VLAN Mask
                         VLAN Mask:
                         <input type="number" bind:value={tool_config_script.vlan_ip_mask}>
@@ -260,6 +252,7 @@ let selectedVendor = supported_vendors[0];
                         <input type="text" bind:value={untagged_interface_to_add}>
                         <button type="button" on:click={add_untagged_interface}>Add Interface</button>
                     </label>
+                    {/if}
         
                     <!-- VTP configuration -->
                     {:else if config_type === "vtp config"}
