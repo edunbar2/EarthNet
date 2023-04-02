@@ -189,7 +189,8 @@ let selectedVendor = supported_vendors[0];
                     {:else if config_type === "vlan config"}
                     <p>VLAN</p>
                     <!-- Deleting? -->
-                    <p>Delete VLAN?</p> <input type="checkbox" bind:checked={tool_config_script.delete}>
+                    <p>Delete VLAN? <input type="checkbox" bind:checked={tool_config_script.delete}></p>
+                    <br>
 
                         <!-- vlan_id: '', vlan_name: '', vlan_description: '', delete: false, vlan_state: true, vlan_mtu: '', vlan_ip_address: '', vlan_ip_mask: '', vlan_tagged_interfaces: [], vlan_untagged_interfaces: [] -->
                         <!-- VLAN ID -->
@@ -202,6 +203,7 @@ let selectedVendor = supported_vendors[0];
                         VLAN Name:
                         <input type="text" bind:value={tool_config_script.vlan_name}>
                     </label>
+                    <br>
                     <label for="VLAN-Description">VLAN Description
                         VLAN Description:
                         <input type="number" bind:value={tool_config_script.vlan_description}>
