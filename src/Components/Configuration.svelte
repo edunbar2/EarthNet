@@ -282,7 +282,7 @@ let selectedVendor = supported_vendors[0];
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 label{
-    text-align: end;
+    text-align: start;
 }
 
 h1 h2 h3 h4{
