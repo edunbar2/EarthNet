@@ -76,10 +76,27 @@ const validateIP = (ip) => {
 
 
     //validate fields are correct and send to python script for implementation
-const submitHandler = () => {
-    for(var device in devices){
-
-        console.log(`Submitted; ${[...device]} will be configured with: ${toggleManual ? manual_script : JSON.stringify(tool_config_script)}`);
+async function submitHandler(){
+    const requestDevice = {
+        devices: devices,
+        scriptData: toggleManual ? manual_script : tool_config_script
+    };
+    console.log(`Submitted. Devices will be will be configured with: ${toggleManual ? manual_script : JSON.stringify(tool_config_script)}`);
+    const response = await fetch('/config', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestDevice)
+    });
+    if(response.ok) {
+        const configText = await response.text();
+        console.log(configText);
+    }
+    else{
+        const error = await response.json();
+        const errorMessage = error.error || 'unknown error occurred';
+        alert(`Error: ${errorMessage}`);
     }
 }
 
