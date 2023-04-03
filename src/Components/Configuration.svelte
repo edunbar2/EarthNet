@@ -15,22 +15,25 @@
     let supported_vendors = [{name:"Cisco", operatingSystems:["IOS", "NX-OS", "IOS-XR"]}, {name:"Juniper", operatingSystems:["1", "2", "3"]}];
     let toggleManual = true;
     let manual_script = "";
-
-    // stores data from the configuration tool to be handled by the python script
-
-    let tool_config_script; 
-    let config_type = "";
-    let interface_to_add = "";
-    let untagged_interface_to_add
-
     let config_map = 
     {
-        'interface config': {interface_name: '', ip_address: 'Switch', subnet_mask: '', description: ''},
+        'interface config': {interface_name: '', ip_address: '', subnet_mask: '', description: ''},
        'static routing': {destination_network: '', next_hop: '', subnet_mask: ''},
        'dynamic routing': {routing_protocol: '', network: '', subnet_mask: '', interface: '', areas: '', ospf_leader: false},
        'vlan config': {vlan_id: '', vlan_name: '', vlan_description: '', delete: false, vlan_state: true, vlan_mtu: '-1', vlan_ip_address: '', vlan_ip_mask: '', vlan_tagged_interfaces: [], vlan_untagged_interfaces: []},
        'vtp config': {vtp_domain: '', vtp_password: ''},
 
+    }
+    
+    // stores data from the configuration tool to be handled by the python script
+
+    let tool_config_script = config_map["interface config"]; 
+    let config_type = "interface config";
+    let interface_to_add = "";
+    let untagged_interface_to_add
+
+    const handleToggleManual = () => {
+        toggleManual = !toggleManual;
     }
 
     const handle_config_type = (event) => {
@@ -66,14 +69,18 @@ const handleVendorChange = (selectedVendorName) => {
 
 const validateIP = (ip) => {
     const regex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-     return regex.test(ip);
+     if(ip !== "") return regex.test(ip);
+    return false
 
 }
 
 
     //validate fields are correct and send to python script for implementation
 const submitHandler = () => {
-    console.log(`Submitted; ${devices} will be configured with: ${toggleManual ? manual_script : tool_config_script}`);
+    for(var device in devices){
+
+        console.log(`Submitted; ${[...device]} will be configured with: ${toggleManual ? manual_script : JSON.stringify(tool_config_script)}`);
+    }
 }
 
 const logClick = () => {
@@ -141,8 +148,7 @@ let selectedVendor = supported_vendors[0];
             </div>
             <Button on:click={addDevice}>Add Device</Button>
             <label for="tool">
-                Manual
-                <input type="checkbox" bind:checked={toggleManual}>
+                <Button on:click={handleToggleManual}> Toolbar</Button>
             </label>
             <br>
             {#if toggleManual}
@@ -153,21 +159,86 @@ let selectedVendor = supported_vendors[0];
                     <!-- Prompt router configuration options -->
                     {#if devices[0].type === 'Router'} 
                     <p>Routing</p>
+                    Conifiguration type:
+                        <select name="config-type" id="switch-config-type" on:change={handle_config_type}>
+                            <option  value="interface config">Interface Configuration</option>
+                            <option value="static routing">Static Routing</option>
+                            <option value="dynamic routing">Dynamic Routing</option>
+                        </select> <br><br>
                     <!-- Interface configuration -->
-
-                        <!-- Routing -->
-
-                        <!-- static routing -->
-
-                        <!-- dynamic routing -->
-
-                        <!-- protocol -->
-
-                        <!-- interface -->
-
-                        <!-- network -->
-
-                        <!-- subnet mask or wildcard mask -->
+                    {#if config_type === "interface config"}
+                    <p>Interface</p>
+                    <label for="Interface-Name">
+                        Interface Name:
+                        <input type="text" bind:value={tool_config_script.interface_name}>
+                    </label><br>
+                    <label for="Interface-ip">
+                        Interface IP:
+                        <input type="text" bind:value={tool_config_script.ip_address}>
+                    </label><br>
+                    <label for="Subnet-Mask">
+                        Subnet Mask:
+                        <input type="text" bind:value={tool_config_script.subnet_mask}>
+                    </label><br>
+                    <label for="Interface-Description">
+                        Description:
+                        <input type="text" bind:value={tool_config_script.description}>
+                    </label><br>
+                    
+                    {:else if config_type === "static routing"}
+                    <label for="Static-Destination-network">
+                        Destination Network:
+                        <input type="text" bind:value={tool_config_script.destination_network}>
+                    </label><br>
+                    <label for="static-next-hop">
+                        next hop:
+                        <input type="text" bind:value={tool_config_script.next_hop}>
+                    </label><br>
+                    <label for="subnet_mask">
+                        Subnet Mask:
+                        <input type="text" bind:value={tool_config_script.subnet_mask}>
+                    </label><br>
+                    {:else if config_type === "dynamic routing"}
+                    <label for="routing-protocol">
+                        Routing Protocol:
+                        <select name="config-type" id="switch-config-type" bind:value={tool_config_script
+                        .routing_protocol}>
+                            <option  value="RIPv1">RIPv1</option>
+                            <option value="RIPv2">RIPv2</option>
+                            <option value="OSPF">OSPF</option>
+                            <option value="EIGRP">EIGRP</option>
+                        </select>
+                    </label><br>
+                    <label for="network">
+                        IP Address:
+                        <input type="text" bind:value={tool_config_script.network}>
+                    </label><br>
+                    <label for="subnet_mask">
+                        Subnet Mask:
+                        <input type="text" bind:value={tool_config_script.subnet_mask}>
+                    </label><br>
+                    <label for="interface">
+                        Interface:
+                        <input type="text" bind:value={tool_config_script.interface}>
+                    </label><br>
+                    {#if tool_config_script.routing_protocol === "OSPF"}
+                    <label for="area">
+                        Area:
+                        <input type="text" bind:value={tool_config_script.areas}>
+                    </label><br>
+                    <label for="OSPF-Leader">
+                        OSPF Leader:
+                        <input type="checkbox" bind:value={tool_config_script.areas}>
+                    </label><br>
+                    {:else if tool_config_script.routing_protocol === "EIGRP"}
+                    <label for="AS">
+                        AS Number:
+                        <input type="text" bind:value={tool_config_script.areas}>
+                    </label><br>
+                    {/if}
+                    <!-- 'dynamic routing': {routing_protocol: '', network: '', subnet_mask: '', interface: '', areas: '', ospf_leader: false}, -->
+                   
+                    {/if}
 
 
                     <!-- Promp switch configuration options -->
@@ -184,72 +255,87 @@ let selectedVendor = supported_vendors[0];
                     </label>
                     <!-- Interface configuration -->
                     {#if config_type === "interface config"}
-                        <p>Interface</p>
+                    <p>Interface</p>
+                    <!-- {interface_name: '', ip_address: '', subnet_mask: '', description: ''} -->
+                    <label for="Interface-Name">
+                        Interface Name:
+                        <input type="text" bind:value={tool_config_script.interface_name}>
+                    </label><br>
+                    <label for="Interface-ip">
+                        Interface IP:
+                        <input type="text" bind:value={tool_config_script.ip_address}>
+                    </label><br>
+                    <label for="Subnet-Mask">
+                        Subnet Mask:
+                        <input type="text" bind:value={tool_config_script.subnet_mask}>
+                    </label><br>
+                    <label for="Interface-Description">
+                        Description:
+                        <input type="text" bind:value={tool_config_script.description}>
+                    </label><br>
+
+
                         <!-- VLAN configuration -->
                     {:else if config_type === "vlan config"}
                     <p>VLAN</p>
                     <!-- Deleting? -->
                     <p>Delete VLAN? <input type="checkbox" bind:checked={tool_config_script.delete}></p>
                     <br>
-
-                        <!-- vlan_id: '', vlan_name: '', vlan_description: '', delete: false, vlan_state: true, vlan_mtu: '', vlan_ip_address: '', vlan_ip_mask: '', vlan_tagged_interfaces: [], vlan_untagged_interfaces: [] -->
                         <!-- VLAN ID -->
-                        <label for="VLAN-ID">VLAN ID
+                        <label for="VLAN-ID">
                             VLAN ID:
                             <input type="number" bind:value={tool_config_script.vlan_id}>
                         </label><br>
                         {#if !tool_config_script.delete}
-                        <label for="VLAN-Name">VLAN Name
+                        <label for="VLAN-Name">
                         VLAN Name:
                         <input type="text" bind:value={tool_config_script.vlan_name}>
                     </label>
                     <br>
-                    <label for="VLAN-Description">VLAN Description
+                    <label for="VLAN-Description">
                         VLAN Description:
                         <input type="number" bind:value={tool_config_script.vlan_description}>
                     </label><br>
-                    <label for="VLAN-State">VLAN State
+                    <label for="VLAN-State">
                         Active or Suspended state?:
                         <input type="checkbox" bind:value={tool_config_script.vlan_state}>
                     </label><br>
-                    <label for="VLAN-MTU">VLAN MTU
+                    <label for="VLAN-MTU">
                         VLAN MTU:
                         <input type="number" bind:value={tool_config_script.vlan_mtu}>
                     </label><br>
-                    <label for="VLAN-IP">VLAN IP
+                    <label for="VLAN-IP">
                         VLAN IP:
                         <input type="number" bind:value={tool_config_script.vlan_ip_address}>
                     </label> <br>
-                    <label for="VLAN-Mask">VLAN Mask
+                    <label for="VLAN-Mask">
                         VLAN Mask:
                         <input type="number" bind:value={tool_config_script.vlan_ip_mask}>
                     </label> <br>
-                    <label for="VLAN-ID">VLAN ID
+                    <label for="VLAN-ID">
                         VLAN ID:
                         <input type="number" bind:value={tool_config_script.vlan_id}>
                     </label>
                     <br><br>
-                    <p>Tagged Interfaces:</p>
-                    <ul>
-                        {#each tool_config_script.vlan_tagged_interfaces as face}
-                            <li>{face}</li>
-                        {/each}
-
-                    </ul>
-                    <label for="VLAN-Tagged-Interfaces">VLAN Tagged Interfaces
+                    <div class="list-wrapper">
+                        <p>Tagged Interfaces:</p>
+                            {#each tool_config_script.vlan_tagged_interfaces as face}
+                            {face}<br>
+                            {/each}        
+                    </div> <br>
+                    <label for="VLAN-Tagged-Interfaces">
                         Add Tagged Interface:
                         <input type="text" bind:value={interface_to_add}>
                         <button type="button" on:click={add_tagged_interface}>Add Interface</button>
                     </label>
                     <br><br>
-                    <p>Untagged Interfaces:</p>
-                    <ul>
+                    <div class="list-wrapper">
+                        <p>Untagged Interfaces:</p>
                         {#each tool_config_script.vlan_untagged_interfaces as face}
-                            <li>{face}</li>
+                            {face}<br>
                         {/each}
-
-                    </ul>
-                    <label for="VLAN-Untagged-Interfaces">VLAN Untagged Interfaces
+                    </div> <br>
+                    <label for="VLAN-Untagged-Interfaces">
                         Add Untagged Interface:
                         <input type="text" bind:value={untagged_interface_to_add}>
                         <button type="button" on:click={add_untagged_interface}>Add Interface</button>
@@ -259,7 +345,15 @@ let selectedVendor = supported_vendors[0];
                     <!-- VTP configuration -->
                     {:else if config_type === "vtp config"}
                     <p>VTP</p>
-                        
+                        <!-- 'vtp config': {vtp_domain: '', vtp_password: ''} -->
+                        <label for="VTP-Domain">
+                            VTP Domain:
+                            <input type="text" bind:value={tool_config_script.vtp_domain}>
+                        </label><br>
+                        <label for="VTP-password">
+                            VTP Password:
+                            <input type="text" bind:value={tool_config_script.vtp_password}>
+                        </label>
                     {/if}
 
 
@@ -285,8 +379,14 @@ label{
     text-align: start;
 }
 
+.list-wrapper{
+    width: 100%;
+    justify-content: center;
+}
+
 ul{
     width: 200px;
+    border: solid 1px black
 }
 
 h1 h2 h3 h4{
@@ -295,6 +395,10 @@ h1 h2 h3 h4{
 
 main{
     justify-content: center;
+}
+
+label input{
+    margin-bottom: 15px;
 }
 
 button{
@@ -322,9 +426,14 @@ button{
     width: 100%;
 }
 
+.toolbar-ip-valid{
+    width: 100px;
+    background-color: #7c8b69;
+    align-self: center;
+}
 
 .ip-valid{
-    transform: translate(120px, -12px);
+    transform: translate(120px, -30px);
 }
 
 .input button{
