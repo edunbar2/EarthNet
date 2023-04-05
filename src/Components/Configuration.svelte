@@ -2,7 +2,6 @@
     import { each } from "svelte/internal";
     import Admin from "./Admin.svelte";
     import Button from "./Parts/Button.svelte";
-    const {spawn} = require("child_process");
 
     // constants
     const maxInputs = 3;
@@ -83,7 +82,38 @@ async function submitHandler(){
         alert("Please enter at least one device!");
     }
     else{
+        const url = "http://localhost:5000/handle_form_data"
+        const formData = new FormData();
+        formData.append('login_information', JSON.stringify(login_information));
+        formData.append('devices', JSON.stringify(devices));
+        formData.append('tool_config_script', toggleManual ? JSON.stringify(manual_script) : JSON.stringify(tool_config_script));
 
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: formData
+        })
+        .then(response => response.text())
+        .then(responseData => {
+            console.log(responseData);
+            const result= JSON.parse(responseData);
+            if(result.success) {
+                const message = result.message;
+                const data = result.data;
+                // display the message and result to the user
+                console.log("Logging result:");
+                console.log(message, " ", result);
+            } else{
+                const errorMessage = result.message;
+            }
+        })
+        .catch(error => {
+            console.log("Printing Error:")
+            console.error(error);
+            console.log("failed")
+        });
     }
 }
     
