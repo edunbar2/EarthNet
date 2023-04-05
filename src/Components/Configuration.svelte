@@ -91,7 +91,7 @@ async function submitHandler(){
         fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'multipart/form-data'
             },
             body: formData
         })
