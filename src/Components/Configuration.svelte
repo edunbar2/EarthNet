@@ -12,7 +12,7 @@
     let devices = [{ip: "", type: "", vendor: "", os: ""}]; // Stores objects contianing the device information
     let supported_device_types = ["Switch", "Router"];
     let number_of_devices = 3;
-    let supported_vendors = [{name:"Cisco", operatingSystems:["IOS", "NX-OS", "IOS-XR"]}, {name:"Juniper", operatingSystems:["1", "2", "3"]}];
+    let supported_vendors = [{name:"Cisco", operatingSystems:["cisco_ios", "cisco_ios_telnet", "NX-OS", "IOS-XR"]}, {name:"Juniper", operatingSystems:["1", "2", "3"]}];
     let toggleManual = true;
     let login_information = {username: '', password: '', secret: ''}
     let manual_script = "";
@@ -77,10 +77,6 @@ const validateIP = (ip) => {
 
 
 //validate fields are correct and send to python script for implementation
-// const formData = new FormData();
-// formData.append('login_information', JSON.stringify(login_information));
-// formData.append('devices', JSON.stringify(devices));
-// formData.append('tool_config_script', toggleManual ? JSON.stringify(manual_script) : JSON.stringify(tool_config_script));
 async function submitHandler() {
   if (devices.length === 0) {
     alert("Please enter at least one device!");
@@ -90,6 +86,8 @@ async function submitHandler() {
       login_information: login_information,
       devices: devices,
       tool_config_script: toggleManual ? manual_script : tool_config_script,
+      manual: toggleManual,
+      config_type: config_type
     };
     const request = new Request(url, {
       method: "POST",
