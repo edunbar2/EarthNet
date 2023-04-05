@@ -81,43 +81,43 @@ const validateIP = (ip) => {
 // formData.append('login_information', JSON.stringify(login_information));
 // formData.append('devices', JSON.stringify(devices));
 // formData.append('tool_config_script', toggleManual ? JSON.stringify(manual_script) : JSON.stringify(tool_config_script));
-async function submitHandler(){
-    if(devices.length === 0){
-        alert("Please enter at least one device!");
+async function submitHandler() {
+  if (devices.length === 0) {
+    alert("Please enter at least one device!");
+  } else {
+    const url = "http://localhost:5000/handle_form_data";
+    const requestData = {
+      login_information: login_information,
+      devices: devices,
+      tool_config_script: toggleManual ? manual_script : tool_config_script,
+    };
+    const request = new Request(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestData),
+    });
+
+    try {
+      const response = await fetch(request);
+      const responseData = await response.json();
+      console.log(responseData);
+      if (responseData.success) {
+        const message = responseData.message;
+        const data = responseData.data;
+        // display the message and result to the user
+        console.log("Logging result:");
+        console.log(message, " ", responseData);
+      } else {
+        const errorMessage = responseData.message;
+      }
+    } catch (error) {
+      console.log("Printing Error:");
+      console.error(error);
+      console.log("failed");
     }
-    else{
-        const url = "http://localhost:5000/handle_form_data"
-        const formData = {"login_information": login_information, 'devices' : devices, 'tool_config_script' : toggleManual ? manual_script : tool_config_script};
-        const testData = JSON.stringify({"login_information": JSON.stringify(login_information), 'devices' : JSON.stringify(devices), 'tool_config_script' : toggleManual ? JSON.stringify(manual_script) : JSON.stringify(tool_config_script)});
-        console.log(JSON.stringify(formData));
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(response => response.text())
-        .then(responseData => {
-            console.log(responseData);
-            const result= JSON.parse(responseData);
-            if(result.success) {
-                const message = result.message;
-                const data = result.data;
-                // display the message and result to the user
-                console.log("Logging result:");
-                console.log(message, " ", result);
-            } else{
-                const errorMessage = result.message;
-            }
-        })
-        .catch(error => {
-            console.log("Printing Error:")
-            console.error(error);
-            console.log("failed")
-        });
-    }
+  }
 }
+
     
 const logClick = () => {
     toggleManual = !toggleManual;

@@ -8,9 +8,10 @@ cors = CORS(app, resources={r"/handle_form_data": {"origins": "*"}}, supports_cr
 @cross_origin()
 def handle_form_data():
     print("starting...")
-    login_informatoin = request.form['login_informatoin']
-    devices = request.form['devices']
-    tool_config_script = request.form['tool_config_script']
+    data = request.get_json()
+    login_information = data['login_information']
+    devices = data['devices']
+    tool_config_script = data['tool_config_script']
 
     #TODO Convert tool_config_script to plain text commands
     data = config()
@@ -20,7 +21,7 @@ def handle_form_data():
         'data': data
 
     }
-    print("returning data")
+    print("returning data", jsonify(return_data))
     return jsonify(return_data)
 
 def config():
