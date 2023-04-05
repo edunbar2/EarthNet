@@ -2,6 +2,7 @@
     import { each } from "svelte/internal";
     import Admin from "./Admin.svelte";
     import Button from "./Parts/Button.svelte";
+    const {spawn} = require("child_process");
 
     // constants
     const maxInputs = 3;
@@ -14,6 +15,7 @@
     let number_of_devices = 3;
     let supported_vendors = [{name:"Cisco", operatingSystems:["IOS", "NX-OS", "IOS-XR"]}, {name:"Juniper", operatingSystems:["1", "2", "3"]}];
     let toggleManual = true;
+    let login_information = {username: '', password: '', secret: ''}
     let manual_script = "";
     let config_map = 
     {
@@ -54,7 +56,7 @@
 
     // functions for form
     const addDevice = () => {
-    devices = [...devices, {ip: "", type: devices[0].type, vendor: "", os: ""}];
+    devices = [...devices, {ip: "", type: devices.length > 0 ? devices[0].type : "Switch", vendor: "", os: ""}];
 }
 
 const removeDevice = (index) => {
@@ -77,29 +79,14 @@ const validateIP = (ip) => {
 
     //validate fields are correct and send to python script for implementation
 async function submitHandler(){
-    const requestDevice = {
-        devices: devices,
-        scriptData: toggleManual ? manual_script : tool_config_script
-    };
-    console.log(`Submitted. Devices will be will be configured with: ${toggleManual ? manual_script : JSON.stringify(tool_config_script)}`);
-    const response = await fetch('/config', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestDevice)
-    });
-    if(response.ok) {
-        const configText = await response.text();
-        console.log(configText);
+    if(devices.length === 0){
+        alert("Please enter at least one device!");
     }
     else{
-        const error = await response.json();
-        const errorMessage = error.error || 'unknown error occurred';
-        alert(`Error: ${errorMessage}`);
+
     }
 }
-
+    
 const logClick = () => {
     toggleManual = !toggleManual;
     console.log("Field is now: " + toggleManual);
@@ -116,10 +103,17 @@ let selectedVendor = supported_vendors[0];
 
 <main>
     <div class=info-div>
-        <p>Please input the devices you wish to configure</p>
     </div>
-        <div class=devices>
-            <form on:submit|preventDefault={submitHandler}>
+    <div class=devices>
+        <form on:submit|preventDefault={submitHandler}>
+            <div class=login-information> 
+                <p>Login Information</p><br>
+                <input type="text" placeholder="username" bind:value={login_information.username}>
+                <input type="password" placeholder="password" bind:value={login_information.password}>
+                <input type="password" placeholder="secret" bind:value={login_information.secret}>
+                
+            </div>
+            <p>Please input the devices you wish to configure</p>
             <div class={scrollable ? "container" : ""}>
                 {#each devices as device, i}
                 <div class="input">
@@ -459,6 +453,11 @@ button{
 }
 .input label{
     margin: 0 5px;
+}
+
+.login-information{
+    width: 100%;
+    background-color: #7c8b69;
 }
 
 @media screen and (max-width: 1125px){
