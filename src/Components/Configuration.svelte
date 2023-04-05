@@ -76,22 +76,22 @@ const validateIP = (ip) => {
 }
 
 
-    //validate fields are correct and send to python script for implementation
+//validate fields are correct and send to python script for implementation
+// const formData = new FormData();
+// formData.append('login_information', JSON.stringify(login_information));
+// formData.append('devices', JSON.stringify(devices));
+// formData.append('tool_config_script', toggleManual ? JSON.stringify(manual_script) : JSON.stringify(tool_config_script));
 async function submitHandler(){
     if(devices.length === 0){
         alert("Please enter at least one device!");
     }
     else{
         const url = "http://localhost:5000/handle_form_data"
-        const formData = new FormData();
-        formData.append('login_information', JSON.stringify(login_information));
-        formData.append('devices', JSON.stringify(devices));
-        formData.append('tool_config_script', toggleManual ? JSON.stringify(manual_script) : JSON.stringify(tool_config_script));
-
+        const formData = JSON.stringify({"login_information": JSON.stringify(login_information), 'devices' : JSON.stringify(devices), 'tool_config_script' : toggleManual ? JSON.stringify(manual_script) : JSON.stringify(tool_config_script)});
         fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'application/json'
             },
             body: formData
         })
