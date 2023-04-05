@@ -16,7 +16,7 @@ def handle_form_data():
     manual_script = data['manual']
     config_type = data['config_type']
 
-    #TODO Convert tool_config_script to plain text commands
+    
     if manual_script: script = tool_config_script.slice("\n")
     else: script = parse_commands(tool_config_script, config_type)
     try:
@@ -35,9 +35,10 @@ def handle_form_data():
             'message': "Once or more devices were not successfully configured.",
             'data' : e
         }
-    
+    print("testing print")
     print("returning data", jsonify(return_data))
     return jsonify(return_data)
+    # return jsonify({'success': True, 'message': "Succeeded in connecting", 'data': 'yay'})
 
 def configure_devices(devices, login_info, config_commands):
     data = {}  # to store the running config data for all devices
@@ -52,7 +53,7 @@ def configure_devices(devices, login_info, config_commands):
             'verbose': False,
         }
 
-        if device['vendor'] == 'cisco':
+        if device['vendor'] == 'Cisco':
             if device['os'] == 'cisco_ios' or device['os'] == 'cisco_ios_telnet':
                 net_connect = ConnectHandler(**device_info)
                 net_connect.enable()
@@ -134,4 +135,3 @@ def parse_commands(config_obj, config_type):
 
 if __name__ == '__main__':
     app.run()
-

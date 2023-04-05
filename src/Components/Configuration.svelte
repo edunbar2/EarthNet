@@ -104,9 +104,11 @@ async function submitHandler() {
         const data = responseData.data;
         // display the message and result to the user
         console.log("Logging result:");
-        console.log(message, " ", responseData);
+        console.log(message, " ", data);
       } else {
         const errorMessage = responseData.message;
+        const errorData = responseData.data;
+        console.error(errorMessage, " ", errorData);
       }
     } catch (error) {
       console.log("Printing Error:");
