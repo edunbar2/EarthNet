@@ -87,13 +87,15 @@ async function submitHandler(){
     }
     else{
         const url = "http://localhost:5000/handle_form_data"
-        const formData = JSON.stringify({"login_information": JSON.stringify(login_information), 'devices' : JSON.stringify(devices), 'tool_config_script' : toggleManual ? JSON.stringify(manual_script) : JSON.stringify(tool_config_script)});
+        const formData = {"login_information": login_information, 'devices' : devices, 'tool_config_script' : toggleManual ? manual_script : tool_config_script};
+        const testData = JSON.stringify({"login_information": JSON.stringify(login_information), 'devices' : JSON.stringify(devices), 'tool_config_script' : toggleManual ? JSON.stringify(manual_script) : JSON.stringify(tool_config_script)});
+        console.log(JSON.stringify(formData));
         fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: formData
+            body: JSON.stringify(formData)
         })
         .then(response => response.text())
         .then(responseData => {
