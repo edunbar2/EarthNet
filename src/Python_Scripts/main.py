@@ -3,7 +3,12 @@ from flask_cors import CORS, cross_origin
 from netmiko import ConnectHandler
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/handle_form_data": {"origins": "*"}}, supports_credentials=True)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
+@app.route('/')
+def home():
+    return "hello, world"
+
 
 @app.route('/handle_form_data', methods=['POST'])
 @cross_origin()
