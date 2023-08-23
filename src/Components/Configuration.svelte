@@ -5,6 +5,7 @@
 
     // constants
     const maxInputs = 3;
+    const ngrok_url = "https://1873-164-52-144-80.ngrok-free.app"
 
 
     // variables
@@ -81,7 +82,7 @@ async function submitHandler() {
   if (devices.length === 0) {
     alert("Please enter at least one device!");
   } else {
-    const url = "http://localhost:5000/handle_form_data";
+    const url = `${ngrok_url}/handle_form_data`;
     const requestData = {
       login_information: login_information,
       devices: devices,
