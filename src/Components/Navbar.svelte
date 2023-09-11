@@ -27,8 +27,9 @@ const  handleTabClick = (tab) => {
 
 <style>
 .bar{
+    color: #aeaeae;
     position: sticky;
-    background-color: #7c8b69;
+    background-color: #162B3F;
     padding: 0;
     height: 75px;
     width: 100%;
@@ -54,7 +55,7 @@ const  handleTabClick = (tab) => {
 }
 
 .highlighted{
-    background-color: #D7F9AB;
+    background-color: #00789D;
     border: none;
     transition: all 0.5s ease-out;
 }

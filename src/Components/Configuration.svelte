@@ -418,6 +418,7 @@ let selectedVendor = supported_vendors[0];
 <style>
 *{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #aeaeae;
 }
 label{
     text-align: start;
@@ -446,7 +447,8 @@ label input{
 }
 
 button{
-    background-color: #D7F9AB;
+    color: white;
+    background-color: #00789D;
     border: none;
     border-radius: 10px;
 }
@@ -464,7 +466,7 @@ button{
 .input{
     display: flex;
     height: 50px;
-    background-color: #7c8b69;
+    background-color: #162B3F;
     margin: 10px;
     padding-top: 15px;
     width: 100%;
@@ -472,7 +474,7 @@ button{
 
 .toolbar-ip-valid{
     width: 100px;
-    background-color: #7c8b69;
+    background-color: #162B3F;
     align-self: center;
 }
 
@@ -490,7 +492,7 @@ button{
 
 .login-information{
     width: 100%;
-    background-color: #7c8b69;
+    background-color: #162B3F;
 }
 
 @media screen and (max-width: 1125px){
@@ -518,10 +520,11 @@ button{
     width: 100%;
     height: 40rem;
     align-self: center;
-    background-color: #7c8b69;
+    background-color: #162B3F;
     border: none;
-    caret-color: #D7F9AB;
+    caret-color: #00789D;
     cursor: pointer;
+    color: white;
 }
 
 .container{

@@ -39,7 +39,7 @@
   main{
     display: flex;
     flex-direction: column;
-    background-color: #6B7361;
+    background-color: #111720;
     height: 100%;
     width:100%;
     border: solid 1px black;

@@ -1,11 +1,11 @@
 
 <header>
     <div class=head>
-        <div class=logo>
+        <!-- <div class=logo>
             <img src="/src/assets/logo.PNG" alt="Logo">
-        </div>
+        </div> -->
         <div class=title>
-            <h1>Green Earth</h1>
+            <h1>BlueNet</h1>
             
         </div>
     </div>
@@ -32,6 +32,7 @@ text-align: center;
 align-self: center;
 margin: 0;
 display: flex;
+color: #aeaeae;
 }
 
 .title h1{
@@ -41,8 +42,8 @@ display: flex;
 
 
 .head{
-    background-color: #7c8b69;
-    height:200px;
+    background-color: #5A778C;
+    height:60px;
     width: 100%;
     margin: 0;
     padding: 0;

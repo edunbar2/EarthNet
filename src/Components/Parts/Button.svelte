@@ -25,8 +25,8 @@
       box-shadow: none;
     }
     .primary{
-      background: #D7F9AB;
-      color: black;
+      background: #00789D;
+      color: white;
     }
     .secondary{
       background: #45c496;

@@ -31,9 +31,12 @@ export let image_src = ''
 
 
 <style>
+    *{
+        color: #aeaeae;
+    }
 
     .highlight{
-        background-color: #D7F9AB;
+        background-color: #00789D;
     }
 
     .image{
@@ -53,7 +56,7 @@ export let image_src = ''
     }
 
     .card{
-        background-color: #7c8b69;
+        background-color: #162B3F;
         justify-content: center;
         margin-top: 40px;
     }
