@@ -531,7 +531,7 @@ button{
     width: 100%;
     max-height: 250px;
     overflow-y: auto;
-    overflow-x: none;
+    overflow-x: hidden;
     padding-right: 16px;
 }
 
