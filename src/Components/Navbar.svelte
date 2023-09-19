@@ -41,7 +41,8 @@ const  handleTabClick = (tab) => {
 .tabs{
     display: flex;
     gap: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    margin-right: 15px;
 }
 
 .logo{
