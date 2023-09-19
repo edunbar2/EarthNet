@@ -64,7 +64,7 @@ const  handleTabClick = (tab) => {
 .logo{
     color: white;
     font-size: 36px;
-    display: flex;
+    position: fixed;
     float: right;
 }
 
