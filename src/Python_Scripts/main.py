@@ -34,10 +34,10 @@ def handle_form_data():
 
          }     
     except Exception as e:
-        print("Error in coonfiguring devices")
+        print("Error in configuring devices")
         return_data = {
             'success' : False,
-            'message': "Once or more devices were not successfully configured.",
+            'message': "One or more devices were not successfully configured.",
             'data' : e
         }
     print("testing print")
