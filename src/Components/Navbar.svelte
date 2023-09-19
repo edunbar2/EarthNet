@@ -27,23 +27,6 @@ const  handleTabClick = (tab) => {
 
 
 <style>
-/*.bar{*/
-/*    color: #aeaeae;*/
-/*    position: sticky;*/
-/*    background-color: #162B3F;*/
-/*    padding: 0;*/
-/*    height: 75px;*/
-/*    width: 100%;*/
-/*    display: flex;*/
-/*    justify-content: flex-end;*/
-/*    border-top: solid 0.5px black;*/
-/*    */
-/*}*/
-/*.tabs{*/
-/*    width: 600px;*/
-/*    display: grid;*/
-/*    grid-template-columns: repeat(3, 1fr);*/
-/*}*/
 
 .bar{
     color: white;
@@ -58,6 +41,7 @@ const  handleTabClick = (tab) => {
 .tabs{
     display: flex;
     gap: 10px;
+    margin-bottom: 10px;
 }
 
 .logo{
