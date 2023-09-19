@@ -27,22 +27,40 @@ const  handleTabClick = (tab) => {
 
 
 <style>
+/*.bar{*/
+/*    color: #aeaeae;*/
+/*    position: sticky;*/
+/*    background-color: #162B3F;*/
+/*    padding: 0;*/
+/*    height: 75px;*/
+/*    width: 100%;*/
+/*    display: flex;*/
+/*    justify-content: flex-end;*/
+/*    border-top: solid 0.5px black;*/
+/*    */
+/*}*/
+/*.tabs{*/
+/*    width: 600px;*/
+/*    display: grid;*/
+/*    grid-template-columns: repeat(3, 1fr);*/
+/*}*/
+
 .bar{
-    color: #aeaeae;
-    position: sticky;
-    background-color: #162B3F;
-    padding: 0;
-    height: 75px;
-    width: 100%;
     display: flex;
-    justify-content: flex-end;
-    border-top: solid 0.5px black;
-    
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
 }
+
 .tabs{
-    width: 600px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    gap: 10px;
+}
+
+.logo{
+    color: white;
+    font-size: 36px;
+    margin-right: auto;
 }
 
 .nav-button{
@@ -61,11 +79,6 @@ const  handleTabClick = (tab) => {
     transition: all 0.5s ease-out;
 }
 
-.logo{
-    color: white;
-    font-size: 36px;
-    float: right;
-}
 
 
 
