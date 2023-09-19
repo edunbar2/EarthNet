@@ -65,6 +65,7 @@ const  handleTabClick = (tab) => {
     color: white;
     font-size: 36px;
     position: fixed;
+    margin-right: 100%;
     float: right;
 }
 
