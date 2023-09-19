@@ -19,8 +19,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 
 <main>
-  
-  <Header />
+
   <Navbar {tabs} {current_tab} on:tabClicked={changeTab}/>
 
   {#if current_tab === "Dashboard"}

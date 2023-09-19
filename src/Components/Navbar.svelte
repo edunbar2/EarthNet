@@ -15,6 +15,7 @@ const  handleTabClick = (tab) => {
 
 
 <div class=bar>
+    <div class="logo">EarthNet</div>
     <div class=tabs>
         {#each tabs as tab}
         <div class="nav-button {current_tab === tab ? 'highlighted' : ''}" id="dash" on:click={() => handleTabClick(tab)}>
