@@ -522,7 +522,7 @@ button{
     align-self: center;
     background-color: #162B3F;
     border: none;
-    caret-color: #00789D;
+    caret-color: white;
     cursor: pointer;
     color: white;
 }

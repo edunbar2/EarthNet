@@ -51,7 +51,7 @@ const  handleTabClick = (tab) => {
     height: 50px;
     pointer-events: auto;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 18;
+    font-size: 18px;
 }
 
 .highlighted{
