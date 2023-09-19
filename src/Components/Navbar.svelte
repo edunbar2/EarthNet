@@ -46,6 +46,9 @@ const  handleTabClick = (tab) => {
 /*}*/
 
 .bar{
+    color: white;
+    background-color: #162B3F;
+    height: 75px;
     display: flex;
     justify-content: space-between;
     align-items: center;
