@@ -36,7 +36,7 @@ export let image_src = ''
     }
 
     .highlight{
-        background-color: #141418;
+        background-color: #162B3F;
     }
 
     .image{
