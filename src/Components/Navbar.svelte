@@ -61,6 +61,13 @@ const  handleTabClick = (tab) => {
     transition: all 0.5s ease-out;
 }
 
+.logo{
+    color: white;
+    font-size: 36px;
+    display: flex;
+    float: right;
+}
+
 
 
 
