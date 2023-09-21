@@ -1,79 +1,83 @@
 <script>
 import Card from "./Parts/card.svelte";
+import found_devices from "./stores/found_devices.js";
+import AutomaticDevice from "./Parts/AutomaticDevice.svelte";
+import Button from "./Parts/Button.svelte";
+import UpdateDevices from "./Parts/UpdateDevices.svelte";
+
+let devices_found = []
+found_devices.subscribe(data => {devices_found = data})
+const maxInputs = 6;
+$: numDevices = devices_found.length;
+$: scrollable = numDevices > maxInputs;
 
 </script>
 
 
 <main>
-<Card has_image={false}>
-   <div slot=title> <h1>Information</h1></div> 
+<div id="left-block">
+<!--This will display the discovered devices-->
+    <h1>Devices Found</h1>
+    <div class={scrollable ? "scroll" : ""}>
 
-    <div slot=description>
-        <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum animi ullam dolor itaque voluptas quidem in laudantium placeat, minima nostrum sit architecto eveniet laborum quibusdam aspernatur neque, sequi natus eum.
-        </p>
+    {#each devices_found as device}
+        <AutomaticDevice {device}/>
+    {/each}
     </div>
-</Card>
+    <UpdateDevices />
+</div>
 
-<Card has_image={false}>
-    <div slot=title> <h1>Statistics</h1></div> 
- 
-     <div slot=description>
-         <p>
-             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum animi ullam dolor itaque voluptas quidem in laudantium placeat, minima nostrum sit architecto eveniet laborum quibusdam aspernatur neque, sequi natus eum.
-         </p>
-     </div>
- </Card>
+    <div id="right-block">
+        <h1> Welcome to EarthNet</h1><br>
+        <p>EarthNet is a network automation tool focused on small businesses.
+            With EarthNet it is easy to make changes on your network efficiently and safely.
+            You no longer have to worry about whether you picked the right IP address or VLAN, EarthNet will handle that for you. </p>
+    </div>
 
- <Card has_image={false}>
-    <div slot=title> <h1>Statistics</h1></div> 
- 
-     <div slot=description>
-         <p>
-             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum animi ullam dolor itaque voluptas quidem in laudantium placeat, minima nostrum sit architecto eveniet laborum quibusdam aspernatur neque, sequi natus eum.
-         </p>
-     </div>
- </Card>
-
- <Card has_image={false}>
-    <div slot=title> <h1>Information</h1></div> 
- 
-     <div slot=description>
-         <p>
-             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum animi ullam dolor itaque voluptas quidem in laudantium placeat, minima nostrum sit architecto eveniet laborum quibusdam aspernatur neque, sequi natus eum.
-         </p>
-     </div>
- </Card>
- 
- <Card has_image={false}>
-     <div slot=title> <h1>Statistics</h1></div> 
-  
-      <div slot=description>
-          <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum animi ullam dolor itaque voluptas quidem in laudantium placeat, minima nostrum sit architecto eveniet laborum quibusdam aspernatur neque, sequi natus eum.
-          </p>
-      </div>
-  </Card>
- 
-  <Card has_image={false}>
-     <div slot=title> <h1>Statistics</h1></div> 
-  
-      <div slot=description>
-          <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum animi ullam dolor itaque voluptas quidem in laudantium placeat, minima nostrum sit architecto eveniet laborum quibusdam aspernatur neque, sequi natus eum.
-          </p>
-      </div>
-  </Card>
- 
 
 </main>
 
 
 <style>
+    *
+    {
+        color: white;
+
+    }
 main{
+
     margin: 0 5%;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: flex;
+}
+
+
+    #left-block{
+        margin-top: 5%;
+        padding: 20px;
+        min-width: 40%;
+        min-height: 40em;
+        background-color: #162B3F;
+        align-content: center;
+    }
+    #left-block h1
+{
+    margin-left: 25%;
+    width: 8em
+}
+
+#right-block
+{
+    padding: 0 5% 0 5%;
+    background: #162B3F;
+    margin: 5% auto;
+    width: 30%;
+    height: 30em;
+    align-content: center;
+}
+
+#right-block p
+{
+    margin-top: -8%;
 }
 
 @media screen and (max-width: 1100px){
@@ -88,7 +92,16 @@ main{
         padding-left: 20%;
         grid-template-columns: 1fr;
     }
+
     
 }
+
+    .scroll{
+        width: 100%;
+        max-height: 465px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 16px;
+    }
 
 </style>
