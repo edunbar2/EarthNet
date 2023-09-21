@@ -9,6 +9,12 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 def home():
     return "hello, world"
 
+@app.route('/update_device_list')
+@cross_origin()
+def update_device_list():
+    print("Gathering updated list...")
+
+
 
 @app.route('/handle_form_data', methods=['POST'])
 @cross_origin()

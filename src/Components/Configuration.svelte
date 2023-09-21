@@ -160,7 +160,7 @@ let selectedVendor = supported_vendors[0];
                         {/if}
                     </label>
                     <label for="type">
-                        Device Type: 
+                        Device Type:
                         <select name="type" id="type" bind:value={device.type}>
                             {#each supported_device_types as device}
                             <option value="{device}">{device}</option>
@@ -176,17 +176,17 @@ let selectedVendor = supported_vendors[0];
                         </select>
                     </label>
                     <label for="os">
-                        Operating System: 
+                        Operating System:
                         <select name="operatingSystem" id="operatingSystem" bind:value={device.os}>
                             {#each selectedVendor.operatingSystems as os}
                             <option value="{os}">{os}</option>
                             {/each}
-                            
+
                         </select>
-                        
+
                     </label>
                     <Button on:click={() => removeDevice(i)} small={true} >Remove Device</Button>
-                    
+
                 </div>
                 {/each}
             </div>
@@ -536,6 +536,8 @@ button{
 }
 
 .tool-div{
+    color: white;
+    background-color: #162B3F;
     border: solid 1px black;
     text-align: center;
 }
