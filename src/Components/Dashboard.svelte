@@ -75,23 +75,11 @@ main{
     align-content: center;
 }
 
-#right-block p
-{
-    margin-top: -8%;
-}
 
 @media screen and (max-width: 1100px){
-    main{
-        grid-template-columns: 1fr 1fr;
-    }
-    
 }
 
 @media screen and (max-width: 700px){
-    main{
-        padding-left: 20%;
-        grid-template-columns: 1fr;
-    }
 
     
 }
