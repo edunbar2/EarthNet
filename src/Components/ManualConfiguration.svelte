@@ -2,6 +2,7 @@
     import { each } from "svelte/internal";
     import Admin from "./Admin.svelte";
     import Button from "./Parts/Button.svelte";
+    import LoginInformationPrompt from "./Parts/LoginInformationPrompt.svelte";
 
     // constants
     const maxInputs = 3;
@@ -139,13 +140,7 @@ let selectedVendor = supported_vendors[0];
     </div>
     <div class=devices>
         <form on:submit|preventDefault={submitHandler}>
-            <div class=login-information> 
-                <p>Login Information</p><br>
-                <input type="text" placeholder="username" bind:value={login_information.username}>
-                <input type="password" placeholder="password" bind:value={login_information.password}>
-                <input type="password" placeholder="secret" bind:value={login_information.secret}>
-                
-            </div>
+            <LoginInformationPrompt/>
             <p>Please input the devices you wish to configure</p>
             <div class={scrollable ? "container" : ""}>
                 {#each devices as device, i}
@@ -488,11 +483,6 @@ button{
 }
 .input label{
     margin: 0 5px;
-}
-
-.login-information{
-    width: 100%;
-    background-color: #162B3F;
 }
 
 @media screen and (max-width: 1125px){
