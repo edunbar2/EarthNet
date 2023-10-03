@@ -9,10 +9,87 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 def home():
     return "hello, world"
 
+
+
+def get_vendor_of_ip(target_ip):
+    arp = ARP(pdst=target_ip)
+    ether = Ether(dst="ff:ff:ff:ff:ff:ff") # Broadcast ethernet frame
+    packet = ether/arp
+    result = srp(packet, timeout=1, verbose=0)[0]
+    for sent, received in result:
+        ip = received.psrc
+        mac = received.hwsrc
+        mac_parser = manuf.MacParser()
+        vendor = mac_parser.get_manuf(mac)
+        if vendor:
+            return vendor
+        else:
+            return "invalid vendor"
+
+def get_all_ip_addresses():
+    ip_info = {}
+    for interface_name in netifaces.interfaces():
+        try:
+            interface_info = netifaces.ifaddresses(interface_name)
+            if netifaces.AF_INET in interface_info:
+                if '127' in interface_info[netifaces.AF_INET][0]['addr'].split('.')[0]:
+                        continue
+                ip_info[interface_name] = {
+                    'ip_address': interface_info[netifaces.AF_INET][0]['addr'],
+                    'subnet_mask': interface_info[netifaces.AF_INET][0]['netmask']
+                }
+        except (KeyError, ValueError):
+            pass
+    return ip_info
+
+def get_ip_range(ip_str, subnet_mask):
+    ip = ipaddress.IPv4Address(ip_str)
+    network = ipaddress.IPv4Network(f"{ip}/{subnet_mask}", strict=False)
+
+    ip_list = [str(ip) for ip in network.hosts()]
+    return ip_list
+
+
+def get_network_devices():
+
+     num_threads = 256
+    all_ip_info = get_all_ip_addresses()
+
+    if all_ip_info:
+        for interface, info in all_ip_info.items():
+            print(f"Interface: {interface}")
+            print(f"IP Address: {info['ip_address']}")
+            print(f"Subnet Mask: {info['subnet_mask']}")
+
+            ip_list = get_ip_range(info['ip_address'], info['subnet_mask'])
+            # Number of threads to use for concurrent execution
+
+        # Use ThreadPoolExecutor to process IP addresses concurrently
+        with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
+            # Map the get_vendor function to each IP address and retrieve the results
+            results = list(executor.map(get_vendor_of_ip, ip_list))
+
+        print(results)
+
+        accepted_vendors = ['Cisco', 'Juniper']
+        viable_devices = []
+        for ip, vendor in zip(ip_list, results):
+            if vendor in accepted_vendors:
+                viable_devices.append({"ip": ip, "vendor": vendor})
+#             print(f"IP: {ip}, Vendor: {vendor}")
+
+        # Print the results
+        return viable_devices
+    else:
+        print("No active network interfaces found.")
+
 @app.route('/update_device_list')
 @cross_origin()
 def update_device_list():
     print("Gathering updated list...")
+    viable_devices = { "data": get_network_devices() }
+    return viable_devices
+
 
 
 

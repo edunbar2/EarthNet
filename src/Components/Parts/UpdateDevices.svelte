@@ -10,16 +10,9 @@ found_devices.subscribe(data => devices = data)
 async function update_devices()
 {
     const url = `${ngrok_url}/update_devices`
-    const requestData =
-        {
-            "current_devices": found_devices
-        };
 
-    const request = new Request(url, {
-        method: "GET",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(requestData),
-    });
+
+    const request = new Request(url);
 
     try{
         const response = await fetch(request);
