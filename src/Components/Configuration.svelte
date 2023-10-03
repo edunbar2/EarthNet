@@ -3,15 +3,45 @@
     import Admin from "./Admin.svelte";
     import Button from "./Parts/Button.svelte";
     import LoginInformationPrompt from "./Parts/LoginInformationPrompt.svelte";
+    import AutomaticDevice from "./Parts/AutomaticDevice.svelte";
+    import found_devices from "./stores/found_devices.js";
 
     // constants
-    const maxInputs = 3;
     const ngrok_url = "https://1873-164-52-144-80.ngrok-free.app"
 
+    let foundDevices = [];
+
+    found_devices.subscribe((data) => {foundDevices = data})
+    const maxInputs = 3
+    $:found_num_devices = foundDevices.length;
+    $:selected_num_devices = devices.length;
+    $:found_scrollable = found_num_devices > maxInputs;
+    $:selected_scrollable = selected_num_devices > maxInputs
+
+
+    const add_device = (device) =>
+    {
+        devices = [...devices, device];
+
+        foundDevices = foundDevices.filter(item => item !== device);
+    }
+
+    const removeSelectedDevice = (device) =>
+    {
+        console.log(device);
+        devices = devices.filter(item => item !== device);
+        foundDevices = [...foundDevices, device]
+    }
+
+    const handleToggleDevices = () =>
+    {
+        automatic_devices = !automatic_devices;
+        devices = [];
+    }
 
     // variables
-    let window = 0; // determine which window to display to the user
-    let devices = [{ip: "", type: "", vendor: "", os: ""}]; // Stores objects contianing the device information
+    let automatic_devices = true;
+    let devices = []; // Stores objects containing the device information
     let supported_device_types = ["Switch", "Router"];
     let number_of_devices = 3;
     let supported_vendors = [{name:"Cisco", operatingSystems:["cisco_ios", "cisco_ios_telnet", "NX-OS", "IOS-XR"]}, {name:"Juniper", operatingSystems:["1", "2", "3"]}];
@@ -141,6 +171,27 @@ let selectedVendor = supported_vendors[0];
     <div class=devices>
         <form on:submit|preventDefault={submitHandler}>
             <LoginInformationPrompt/>
+            {#if automatic_devices}
+                <div class="automatic_devices">
+                    <p>Discovered Devices</p>
+                    <div class={found_scrollable ? "scroll" : ""}>
+                        {#each foundDevices as device}
+                            <AutomaticDevice {device}/>
+                            <Button on:click={() => add_device(device)}>Select Device</Button>
+                        {/each}
+                    </div>
+                    <div class="automatic_devices">
+                    <p>Selected Devices</p>
+                        <div class={selected_scrollable ? "scroll" : ""}>
+
+                        {#each devices as device}
+                            <AutomaticDevice {device}/>
+                            <Button on:click={() => removeSelectedDevice(device)}>Remove Device</Button>
+                        {/each}
+                        </div>
+                    </div>
+                </div>
+                {:else}
             <p>Please input the devices you wish to configure</p>
             <div class={scrollable ? "container" : ""}>
                 {#each devices as device, i}
@@ -185,9 +236,11 @@ let selectedVendor = supported_vendors[0];
                 </div>
                 {/each}
             </div>
+            {/if}
             <Button on:click={addDevice}>Add Device</Button>
             <label for="tool">
                 <Button on:click={handleToggleManual}> Toolbar</Button>
+                <Button on:click={handleToggleDevices}>Toggle Discovery</Button>
             </label>
             <br>
             {#if toggleManual}
@@ -196,6 +249,11 @@ let selectedVendor = supported_vendors[0];
                 <div class=tool-div>
                     <h2>Configuration Tool</h2>
                     <!-- Prompt router configuration options -->
+                    {#if devices.length === 0}
+                        <h2>Please select a device to configure</h2>
+                        {:else }
+
+
                     {#if devices[0].type === 'Router'} 
                     <p>Routing</p>
                     Conifiguration type:
@@ -398,8 +456,8 @@ let selectedVendor = supported_vendors[0];
 
 
                     {/if}
-                </div>   
-            
+                    {/if}
+                </div>
             {/if}
             <div class="button-wrapper">
                 <Button  on:click={submitHandler} end={true}>Configure!</Button>
@@ -413,7 +471,12 @@ let selectedVendor = supported_vendors[0];
 <style>
 *{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: #aeaeae;
+    /*color: white;*/
+}
+
+p
+{
+    color: white;
 }
 label{
     text-align: start;
@@ -456,6 +519,17 @@ button{
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.automatic_devices
+{
+    margin-top: 5%;
+    padding: 20px;
+    min-width: 50%;
+    min-height: 20em;
+    align-content: center;
+    background-color: #162B3F;
+
 }
 
 .input{
@@ -530,5 +604,13 @@ button{
     background-color: #162B3F;
     border: solid 1px black;
     text-align: center;
+}
+
+.scroll{
+    width: 100%;
+    max-height: 265px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 16px;
 }
 </style>

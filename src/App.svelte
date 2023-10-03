@@ -3,7 +3,7 @@
  import Header from "./Components/Header.svelte";
  import Footer from "./Components/Footer.svelte";
  import Dashboard from "./Components/Dashboard.svelte";
- import Configuration from "./Components/ManualConfiguration.svelte";
+ import Configuration from "./Components/Configuration.svelte";
  import Admin from "./Components/Admin.svelte";
  
  let tabs = ["Dashboard", "Configure", "Admin"];

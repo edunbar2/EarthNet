@@ -25,6 +25,7 @@ function updateLoginInformation()
 <style>
 
     .login-information{
+        color: white;
         width: 100%;
         background-color: #162B3F;
     }
