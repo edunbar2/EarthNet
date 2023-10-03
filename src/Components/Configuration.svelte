@@ -113,6 +113,7 @@ async function submitHandler() {
   if (devices.length === 0) {
     alert("Please enter at least one device!");
   } else {
+    console.log("Devices: " + JSON.stringify(devices) + "Configuration: " + JSON.stringify(tool_config_script));
     const url = `${ngrok_url}/handle_form_data`;
     const requestData = {
       login_information: login_information,
@@ -338,7 +339,7 @@ let selectedVendor = supported_vendors[0];
                     {/if}
 
 
-                    <!-- Promp switch configuration options -->
+                    <!-- Prompt switch configuration options -->
                     {:else}
 
                     <p>Switching</p>

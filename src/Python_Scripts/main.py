@@ -106,7 +106,10 @@ def handle_form_data():
 
     
     if manual_script: script = tool_config_script.slice("\n")
-    else: script = parse_commands(tool_config_script, config_type)
+    
+    else: 
+        print(f"Starting config with {tool_config_script} and config type: {config_type}")
+        script = parse_commands(tool_config_script, config_type)
     try:
     # configure devices with login_info, devices, and parsed commands
         data = configure_devices(devices, login_information, script)
@@ -189,23 +192,23 @@ def parse_commands(config_obj, config_type):
         if config_obj['delete']:
             cmds.append("no vlan " + config_obj['vlan_id'])
         else:
-            cmds.append("vlan " + config_obj['vlan_id'])
-            cmds.append("name " + config_obj['vlan_name'])
-            cmds.append("description " + config_obj['vlan_description'])
+            cmds.append(f"vlan {config_obj['vlan_id']}")
+            cmds.append(f"name {config_obj['vlan_name']}")
+            cmds.append(f"description {config_obj['vlan_description']}")
             if not config_obj['vlan_state']:
                 cmds.append("shutdown")
             if config_obj['vlan_mtu'] != "-1":
-                cmds.append("mtu " + config_obj['vlan_mtu'])
+                cmds.append(f"mtu {config_obj['vlan_mtu']}")
             if config_obj['vlan_ip_address'] != "":
-                cmds.append("ip address " + config_obj['vlan_ip_address'] + " " + config_obj['vlan_ip_mask'])
+                cmds.append("ip address {config_obj['vlan_ip_address']} {config_obj['vlan_ip_mask']}")
             for intf in config_obj['vlan_tagged_interfaces']:
-                cmds.append("interface " + intf)
+                cmds.append(f"interface {intf}")
                 cmds.append("switchport mode trunk")
-                cmds.append("switchport trunk allowed vlan add " + config_obj['vlan_id'])
+                cmds.append(f"switchport trunk allowed vlan add {config_obj['vlan_id']}")
             for intf in config_obj['vlan_untagged_interfaces']:
-                cmds.append("interface " + intf)
+                cmds.append(f"interface {intf}")
                 cmds.append("switchport mode access")
-                cmds.append("switchport access vlan " + config_obj['vlan_id'])
+                cmds.append(f"switchport access vlan {config_obj['vlan_id']}")
         return cmds
 
     elif config_type == 'vtp config':
