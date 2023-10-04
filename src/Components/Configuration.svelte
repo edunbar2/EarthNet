@@ -5,12 +5,14 @@
     import LoginInformationPrompt from "./Parts/LoginInformationPrompt.svelte";
     import AutomaticDevice from "./Parts/AutomaticDevice.svelte";
     import found_devices from "./stores/found_devices.js";
+    import LoginInformation from "./stores/LoginInformation";
 
     // constants
-    const ngrok_url = "https://1873-164-52-144-80.ngrok-free.app"
+    const ngrok_url = "https://29b2-38-110-15-66.ngrok-free.app"
 
     let foundDevices = [];
 
+    
     found_devices.subscribe((data) => {foundDevices = data})
     const maxInputs = 3
     $:found_num_devices = foundDevices.length;
@@ -46,7 +48,9 @@
     let number_of_devices = 3;
     let supported_vendors = [{name:"Cisco", operatingSystems:["cisco_ios", "cisco_ios_telnet", "NX-OS", "IOS-XR"]}, {name:"Juniper", operatingSystems:["1", "2", "3"]}];
     let toggleManual = true;
-    let login_information = {username: '', password: '', secret: ''}
+    let login_information = {}
+    LoginInformation.subscribe(data => login_information = data);
+
     let manual_script = "";
     let config_map = 
     {
@@ -114,14 +118,15 @@ async function submitHandler() {
     alert("Please enter at least one device!");
   } else {
     console.log("Devices: " + JSON.stringify(devices) + "Configuration: " + JSON.stringify(tool_config_script));
-    const url = `${ngrok_url}/handle_form_data`;
+    const url = `http://10.11.12.26:5000/handle_form_data`;
     const requestData = {
-      login_information: login_information,
-      devices: devices,
-      tool_config_script: toggleManual ? manual_script : tool_config_script,
-      manual: toggleManual,
-      config_type: config_type
+      "login_information": login_information,
+      "devices": devices,
+      "tool_config_script": toggleManual ? manual_script : tool_config_script,
+      "manual": toggleManual,
+      "config_type": config_type
     };
+
     const request = new Request(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -131,7 +136,6 @@ async function submitHandler() {
     try {
       const response = await fetch(request);
       const responseData = await response.json();
-      console.log(responseData);
       if (responseData.success) {
         const message = responseData.message;
         const data = responseData.data;
@@ -144,7 +148,7 @@ async function submitHandler() {
         console.error(errorMessage, " ", errorData);
       }
     } catch (error) {
-      console.log("Printing Error:");
+      console.log("HTTP Request failed: Printing Error:");
       console.error(error);
       console.log("failed");
     }

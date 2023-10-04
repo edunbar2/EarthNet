@@ -2,23 +2,36 @@
 import found_devices from "../stores/found_devices.js";
 import Button from "./Button.svelte";
 
-const ngrok_url = "https://1873-164-52-144-80.ngrok-free.app"
+const ngrok_url = "https://29b2-38-110-15-66.ngrok-free.app"
 let devices = [];
 
 
 found_devices.subscribe(data => devices = data)
 async function update_devices()
 {
-    const url = `${ngrok_url}/update_devices`
+    console.log("Updating Devices...");
+    const url = `http://10.11.12.26:5000/update_device_list`;
+    console.log(url);
 
 
-    const request = new Request(url);
-
+    const request = new Request(url, {
+        method: "GET",
+        headers: {
+            "Content-type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+        }
+    });
     try{
-        const response = await fetch(request);
+        
+        const response = await fetch(url);
+        console.log("Request has returned from server");
+
         const responseData = await response.json();
-        found_devices.set(responseData);
+	console.log("Update Successful! Updating store.");
+    console.log(responseData["data"]);
+        found_devices.set(responseData["data"]);
     } catch(error) {
+        console.log("Did not work: printing error:");
         console.log(error);
     }
 }

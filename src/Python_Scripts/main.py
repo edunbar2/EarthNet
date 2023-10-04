@@ -1,9 +1,14 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from netmiko import ConnectHandler
+from scapy.all import ARP, Ether, srp
+from manuf import manuf
+import netifaces
+import ipaddress
+import concurrent.futures
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
+cors = CORS(app, resources={r"/*": {"origins": "http://10.11.12.26:5173"}})
 
 @app.route('/')
 def home():
@@ -51,8 +56,7 @@ def get_ip_range(ip_str, subnet_mask):
 
 
 def get_network_devices():
-
-     num_threads = 256
+    num_threads = 256
     all_ip_info = get_all_ip_addresses()
 
     if all_ip_info:
@@ -83,12 +87,13 @@ def get_network_devices():
     else:
         print("No active network interfaces found.")
 
-@app.route('/update_device_list')
+@app.route('/update_device_list', methods=['GET'])
 @cross_origin()
 def update_device_list():
     print("Gathering updated list...")
     viable_devices = { "data": get_network_devices() }
-    return viable_devices
+    print(f"Devices Updated, Printing Devices: {jsonify(viable_devices)}")
+    return jsonify(viable_devices)
 
 
 
@@ -98,18 +103,25 @@ def update_device_list():
 def handle_form_data():
     print("starting...")
     data = request.get_json()
+    print(request)
+    print("getting data")
     login_information = data['login_information']
     devices = data['devices']
     tool_config_script = data['tool_config_script']
     manual_script = data['manual']
     config_type = data['config_type']
 
-    
+    script = []
     if manual_script: script = tool_config_script.slice("\n")
     
     else: 
         print(f"Starting config with {tool_config_script} and config type: {config_type}")
-        script = parse_commands(tool_config_script, config_type)
+        if 'cisco' in devices[0]['os']:
+            script = parse_cisco_commands(tool_config_script, config_type)
+        elif 'juniper' in devices[0]['os']:
+            script = parse_juniper_commands(tool_config_script, config_type)
+
+        print(f"Converted to commands appropriate for {devices[0]['os']}")
     try:
     # configure devices with login_info, devices, and parsed commands
         data = configure_devices(devices, login_information, script)
@@ -163,8 +175,53 @@ def configure_devices(devices, login_info, config_commands):
 
     return data
 
+def parse_juniper_commands(config_obj, config_type):
+    cmds = []
 
-def parse_commands(config_obj, config_type):
+    if config_type == 'interface config':
+        cmds.append(f'set interfaces {config_obj["interface_name"]} unit 0 family inet address {config_obj["ip_address"]}/{config_obj["subnet_mask"]}')
+        cmds.append(f'set interfaces {config_obj["interface_name"]} description "{config_obj["description"]}"')
+
+    elif config_type == 'static routing':
+        cmds.append(f'set routing-options static route {config_obj["destination_network"]}/{config_obj["subnet_mask"]} next-hop {config_obj["next_hop"]}')
+
+    elif config_type == 'dynamic routing':
+        cmds.append(f'set protocols {config_obj["routing_protocol"]} router-id {config_obj["router_id"]}')
+        cmds.append(f'set protocols {config_obj["routing_protocol"]} area {config_obj["area_id"]} interface {config_obj["interface"]}')
+        if config_obj['ospf_leader']:
+            cmds.append('set protocols {config_obj["routing_protocol"]} area {config_obj["area_id"]} interface {config_obj["interface"]} priority 255')
+
+    elif config_type == 'vlan config':
+        if config_obj['delete']:
+            cmds.append(f'delete vlans {config_obj["vlan_id"]}')
+        else:
+            cmds.append(f'set vlans {config_obj["vlan_id"]} vlan-id {config_obj["vlan_id"]}')
+            cmds.append(f'set vlans {config_obj["vlan_id"]} l3-interface vlan.{config_obj["vlan_id"]}')
+            cmds.append(f'set vlans {config_obj["vlan_id"]} description "{config_obj["vlan_description"]}"')
+            if not config_obj['vlan_state']:
+                cmds.append(f'set vlans {config_obj["vlan_id"]} l3-interface vlan.{config_obj["vlan_id"]} disable')
+            if config_obj['vlan_mtu'] != "-1":
+                cmds.append(f'set vlans {config_obj["vlan_id"]} mtu {config_obj["vlan_mtu"]}')
+            if config_obj['vlan_ip_address'] != "":
+                cmds.append(f'set interfaces vlan unit 0 family inet address {config_obj["vlan_ip_address"]}/{config_obj["vlan_ip_mask"]}')
+            for intf in config_obj['vlan_tagged_interfaces']:
+                cmds.append(f'set interfaces {intf} unit 0 family ethernet-switching interface-mode trunk')
+                cmds.append(f'set interfaces {intf} unit 0 family ethernet-switching vlan members {config_obj["vlan_id"]}')
+            for intf in config_obj['vlan_untagged_interfaces']:
+                cmds.append(f'set interfaces {intf} unit 0 family ethernet-switching interface-mode access')
+                cmds.append(f'set interfaces {intf} unit 0 family ethernet-switching vlan members {config_obj["vlan_id"]}')
+
+    elif config_type == 'vtp config':
+        # Juniper does not have an equivalent to Cisco's VTP, so this part is left empty
+        pass
+
+    else:
+        raise ValueError('Invalid configuration type: ' + config_type)
+
+    return cmds
+
+
+def parse_cisco_commands(config_obj, config_type):
     if config_type == 'interface config':
         cmds = []
         cmds.append("interface " + config_obj['interface_name'])
@@ -225,4 +282,4 @@ def parse_commands(config_obj, config_type):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='10.11.12.26', port=5000, debug=True)

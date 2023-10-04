@@ -20,9 +20,13 @@ $: scrollable = numDevices > maxInputs;
     <h1>Devices Found</h1>
     <div class={scrollable ? "scroll" : ""}>
 
-    {#each devices_found as device}
-        <AutomaticDevice {device}/>
-    {/each}
+    {#if devices_found.length > 0}
+        {#each devices_found as device}
+            <AutomaticDevice {device}/>
+        {/each}
+    {:else}
+        <p>No devices found!</p>
+    {/if}
     </div>
     <UpdateDevices />
 </div>
