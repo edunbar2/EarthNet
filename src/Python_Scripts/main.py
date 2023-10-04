@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from netmiko import ConnectHandler
+from netmiko.ssh_autodetect import SSHDetect
 from scapy.all import ARP, Ether, srp
 from manuf import manuf
 import netifaces
@@ -155,6 +156,12 @@ def configure_devices(devices, login_info, config_commands):
             'port': 22 if "telnet" not in device['os'] else 23,
             'verbose': False,
         }
+
+        if device['device_type'] == "":
+            device['device_type'] = 'autodetect'
+            guesser = SSHDetect(**remote_device)
+            best_match = guesser.autodetect()
+            device['device_type'] = best_match
 
         if device['vendor'] == 'Cisco':
             if device['os'] == 'cisco_ios' or device['os'] == 'cisco_ios_telnet':
