@@ -5,7 +5,7 @@
             <img src="/src/assets/logo.PNG" alt="Logo">
         </div> -->
         <div class=title>
-            <h1>BlueNet</h1>
+            <h1>Orchestrate</h1>
             
         </div>
     </div>
