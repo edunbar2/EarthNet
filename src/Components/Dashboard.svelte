@@ -32,10 +32,10 @@ $: scrollable = numDevices > maxInputs;
 </div>
 
     <div id="right-block">
-        <h1> Welcome to EarthNet</h1><br>
-        <p>EarthNet is a network automation tool focused on small businesses.
-            With EarthNet it is easy to make changes on your network efficiently and safely.
-            You no longer have to worry about whether you picked the right IP address or VLAN, EarthNet will handle that for you. </p>
+        <h1> Welcome to Orchestrate</h1><br>
+        <p>Orchestrate is a network automation tool focused on small businesses.
+            With Orchestrate it is easy to make changes on your network efficiently and safely.
+            You no longer have to worry about whether you picked the right IP address or VLAN, Orchestrate will handle that for you. </p>
     </div>
 
 
