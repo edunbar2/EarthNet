@@ -73,7 +73,7 @@ def get_network_devices():
             # Map the get_vendor function to each IP address and retrieve the results
             results = list(executor.map(get_vendor_of_ip, ip_list))
 
-        print(results)
+        # print(results)
 
         accepted_vendors = ['Cisco', 'Juniper']
         viable_devices = []
