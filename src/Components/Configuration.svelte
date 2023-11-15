@@ -41,6 +41,14 @@
         devices = [];
     }
 
+    const handleToggleRouter = () => {
+        console.log(devices)
+        devices = devices.map(device => {
+      return { ...device, type: device.type === '' ? 'Router' : (device.type === 'Router' ? 'switch' : 'Router') };
+    });
+    console.log(devices)
+    }
+
     // variables
     let automatic_devices = true;
     let devices = []; // Stores objects containing the device information
@@ -246,6 +254,10 @@ let selectedVendor = supported_vendors[0];
             <label for="tool">
                 <Button on:click={handleToggleManual}> Toolbar</Button>
                 <Button on:click={handleToggleDevices}>Toggle Discovery</Button>
+                {#if !toggleManual}
+                <Button on:click={handleToggleRouter}>Toggle Device Type</Button>
+
+                {/if}
             </label>
             <br>
             {#if toggleManual}
